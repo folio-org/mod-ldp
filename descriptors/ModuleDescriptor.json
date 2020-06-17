@@ -1,0 +1,21 @@
+{
+  "id" : "mod-ldp-1.0",
+  "name" : "Hello World",
+  "provides" : [ {
+    "id" : "hello",
+    "version" : "1.0",
+      "handlers": [ {
+      "methods": [ "GET" ],
+      "pathPattern" : "/ldp/rt/journal_access_per_time",
+      "permissionsRequired": [ "ldp.realtime.journal_access_per_time.get" ]
+    } ]
+  } ],
+  "permissionSets": [{
+    "description": "Get journal access per time from the LDP database",
+    "displayName": "LDP -- Get Journal Access Per Time",
+    "permissionName": "ldp.realtime.journal_access_per_time.get"
+  }],
+  "launchDescriptor" : {
+    "dockerImage" : "mod-ldp"
+  }
+}

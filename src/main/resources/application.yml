@@ -1,0 +1,14 @@
+server:
+  port: 8082
+spring:
+  # jpa:  
+    # hibernate:  
+    #   ddl-auto: create  
+    # database-platform: org.hibernate.dialect.PostgreSQLDialect  
+  datasource:  
+    url: "jdbc:postgresql://glintcore.net:5432/folio_release"  
+    username: ldp  
+    password: <>
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 5
