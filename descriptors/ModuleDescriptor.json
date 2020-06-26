@@ -1,19 +1,19 @@
 {
   "id" : "mod-ldp-1.0",
-  "name" : "Hello World",
+  "name" : "ldp",
   "provides" : [ {
-    "id" : "hello",
+    "id" : "db-logs",
     "version" : "1.0",
       "handlers": [ {
       "methods": [ "GET" ],
-      "pathPattern" : "/ldp/rt/journal_access_per_time",
-      "permissionsRequired": [ "ldp.realtime.journal_access_per_time.get" ]
+      "pathPattern" : "/ldp/db/log",
+      "permissionsRequired": [ "ldp.db.log.get" ]
     } ]
   } ],
   "permissionSets": [{
-    "description": "Get journal access per time from the LDP database",
-    "displayName": "LDP -- Get Journal Access Per Time",
-    "permissionName": "ldp.realtime.journal_access_per_time.get"
+    "description": "Get ldp system logs from the database",
+    "displayName": "LDP -- Get System Logs",
+    "permissionName": "ldp.db.log.get"
   }],
   "launchDescriptor" : {
     "dockerImage" : "mod-ldp"
