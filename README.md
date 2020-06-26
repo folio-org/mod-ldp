@@ -1,10 +1,10 @@
 # mod-ldp
 
-Current functionality is limited to retrieving all logs from the folio_release database, ldpsystem.log table. See application.yml for configuration. 
+Current functionality is limited to retrieving all logs from the folio_release database, ldpsystem.log table. See [application.yml](src/main/resources/application.yml) for configuration. 
 
 #### Install:
 ```
-git clone https://github.com/openlibraryenvironment/mod-ldp.git
+git clone https://github.com/library-data-platform/mod-ldp.git
 ```
 
 Set password like so before running any commands:
