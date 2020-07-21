@@ -1,4 +1,4 @@
-package com.folio.ldp;
+package org.folio.ldp;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
