@@ -1,4 +1,4 @@
-package com.folio.ldp;
+package org.folio.ldp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

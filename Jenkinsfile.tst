@@ -1,8 +1,8 @@
 buildMvn {
-  publishModDescriptor = 'yes'
-  publishAPI = 'yes'
-  mvnDeploy = 'yes'
-  runLintRamlCop = 'yes'
+  publishModDescriptor = 'no'
+  publishAPI = 'no'
+  mvnDeploy = 'no'
+  runLintRamlCop = 'no'
   doKubeDeploy = false
 
   doDocker = {

@@ -1,6 +1,6 @@
 {
-  "id" : "mod-ldp-1.0",
-  "name" : "ldp",
+  "id" : "@artifactId@-@version@",
+  "name" : "ldp module",
   "provides" : [ {
     "id" : "db-logs",
     "version" : "1.0",
@@ -16,6 +16,18 @@
     "permissionName": "ldp.db.log.get"
   }],
   "launchDescriptor" : {
-    "dockerImage" : "mod-ldp"
+    "dockerImage": "@artifactId@:@version@",
+    "dockerPull": false,
+    "dockerArgs": {
+      "HostConfig": {
+        "Memory": 357913941,
+        "PortBindings": { "8001/tcp": [ { "HostPort": "%p" } ] }
+      }
+    },
+    "env": [
+      { "name": "JAVA_OPTIONS",
+        "value": "-XX:MaxRAMPercentage=66.0"
+      }
+    ]
   }
 }

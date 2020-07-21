@@ -1,4 +1,4 @@
-package com.folio.ldp;
+package org.folio.ldp;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
