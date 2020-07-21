@@ -11,7 +11,6 @@
   <groupId>org.folio</groupId>
   <artifactId>mod-ldp</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>LDP module</name>
   <description>REST server for Library Data Platform</description>
 
   <properties>
