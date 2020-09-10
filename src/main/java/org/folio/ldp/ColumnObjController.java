@@ -10,16 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/ldp/db/tables")
-public class TableObjController {
-  @Autowired TableObjRepository tableRepository;
-  private List<TableObj> tables;
+@RequestMapping("/ldp/db/columns")
+public class ColumnObjController {
+  @Autowired ColumnObjRepository columnRepository;
   
   @GetMapping
-  public List<TableObj> getTableObjs() {
-    if(tables == null) {
-      tables = (List<TableObj>) tableRepository.findAll();
-    }
-    return tables;
+  public List<ColumnObj> getColumnsForTable(String table) {
+
+    // TODO: Validate table string
+
+    return (List<ColumnObj>) columnRepository.findByTableName(table);
   }
 }

@@ -1,6 +1,10 @@
+debug: false
 server:
   port: 8001
 spring:
+  jackson:
+    serialization:
+      indent_output: true
   # jpa:  
     # hibernate:  
     #   ddl-auto: create  

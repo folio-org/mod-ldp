@@ -1,5 +1,7 @@
 package org.folio.ldp;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -17,19 +19,19 @@ public class LdpApplication {
 	}
 
 
-  @Bean
-  public CommandLineRunner demo(TableObjRepository tableObjRepository) {
-    return (args) -> {
+  // @Bean
+  // public CommandLineRunner demo(TableObjRepository tableObjRepository) {
+  //   return (args) -> {
 
-      // fetch all customers
-      log.info("Customers found with findAll():");
-      log.info("-------------------------------");
-      for (TableObj tableObj : tableObjRepository.findAll()) {
-        log.info(tableObj.toString());
-      }
-      log.info("");
+  //     // fetch all customers
+  //     log.info("Customers found with findAll():");
+  //     log.info("-------------------------------");
+  //     for (TableObj tableObj : tableObjRepository.findAll()) {
+  //       log.info(tableObj.toString());
+  //     }
+  //     log.info("");
 
-    };
-  }
+  //   };
+  // }
 
 }
