@@ -17,19 +17,19 @@ public class LdpApplication {
 	}
 
 
-  // @Bean
-  // public CommandLineRunner demo(LogObjRepository repository) {
-  //   return (args) -> {
+  @Bean
+  public CommandLineRunner demo(TableObjRepository tableObjRepository) {
+    return (args) -> {
 
-  //     // fetch all customers
-  //     log.info("Customers found with findAll():");
-  //     log.info("-------------------------------");
-  //     for (LogObj logObj : repository.findAll()) {
-  //       log.info(logObj.toString());
-  //     }
-  //     log.info("");
+      // fetch all customers
+      log.info("Customers found with findAll():");
+      log.info("-------------------------------");
+      for (TableObj tableObj : tableObjRepository.findAll()) {
+        log.info(tableObj.toString());
+      }
+      log.info("");
 
-  //   };
-  // }
+    };
+  }
 
 }
