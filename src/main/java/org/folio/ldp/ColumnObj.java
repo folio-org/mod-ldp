@@ -18,8 +18,8 @@ import javax.persistence.Table;
 @Table(name = "columns", schema="information_schema")
 public class ColumnObj implements Serializable {
     @Id
-    private String columnName;
-    private String ordinalPosition;
+    public String columnName;
+    public String ordinalPosition;
     private String tableSchema;
     private String tableName;
 }

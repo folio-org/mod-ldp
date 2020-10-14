@@ -19,7 +19,7 @@ import javax.persistence.Table;
 public class TableObj implements Serializable {
     @Id
     // private Timestamp updated;
-    private String tableName;
+    public String tableName;
     private String documentationUrl;
     private String rowCount;
 }
