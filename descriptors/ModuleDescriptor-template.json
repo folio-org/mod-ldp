@@ -2,18 +2,35 @@
   "id" : "@artifactId@-@version@",
   "name" : "ldp module",
   "provides" : [ {
-    "id" : "db-logs",
+    "id" : "ldp-query",
     "version" : "1.0",
-      "handlers": [ {
-      "methods": [ "GET" ],
-      "pathPattern" : "/ldp/db/log",
-      "permissionsRequired": [ "ldp.db.log.get" ]
-    } ]
+      "handlers": [
+        {
+          "methods": [ "GET" ],
+          "pathPattern" : "/ldp/db/log",
+          "permissionsRequired": [ "ldp.read" ]
+        },
+        {
+          "methods": [ "GET" ],
+          "pathPattern" : "/ldp/db/columns",
+          "permissionsRequired": [ "ldp.read" ]
+        },
+        {
+          "methods": [ "GET" ],
+          "pathPattern" : "/ldp/db/tables",
+          "permissionsRequired": [ "ldp.read" ]
+        },
+        {
+          "methods": [ "POST" ],
+          "pathPattern" : "/ldp/db/query",
+          "permissionsRequired": [ "ldp.read" ]
+        }
+  ]
   } ],
   "permissionSets": [{
-    "description": "Get ldp system logs from the database",
-    "displayName": "LDP -- Get System Logs",
-    "permissionName": "ldp.db.log.get"
+    "description": "Read LDP data",
+    "displayName": "LDP -- Read",
+    "permissionName": "ldp.read"
   }],
   "launchDescriptor" : {
     "dockerImage": "@artifactId@:@version@",

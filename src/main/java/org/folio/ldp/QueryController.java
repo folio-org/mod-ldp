@@ -63,19 +63,24 @@ public class QueryController {
     // DbColumn custIdCol = customerTable.addColumn("cust_id", "number", null);
     
     Map<String, String> availableColumns = columnController.getColumnsForTableAsMap(query.tableName);
-    SelectQuery selectQuery =
-      (new SelectQuery())
-      .addAllColumns()
-      .addCustomFromTable(query.tableName);
+    SelectQuery selectQuery = (new SelectQuery()).addCustomFromTable(query.tableName);
+      
+    if(query.showColumns == null || query.showColumns.isEmpty()) {
+      selectQuery.addAllColumns();
+    } else {
+      for (String col : query.showColumns) {
+        selectQuery = selectQuery.addCustomColumns(new CustomSql(col));
+      }
+    }
     
-    for (ColumnFilter col : query.columns) {
+    for (ColumnFilter col : query.columnFilters) {
       if(col == null || col.key == "" || col.key == null || col.value == "" || col.value == null) { continue; }
       selectQuery = selectQuery.addCondition(BinaryCondition.equalTo(new CustomSql(col.key), col.value));
     }
 
     String selectQueryStr = selectQuery.validate().toString();
 
-    System.out.println("QUERYSTART");
+    System.out.println(query.showColumns);
     System.out.println(selectQueryStr);
     String rawQueryContent = selectQueryStr;
 

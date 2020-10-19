@@ -8,7 +8,8 @@ public interface ColumnObjRepository extends JpaRepository<ColumnObj, String> {
 
   @Query("FROM #{#entityName} " +
          "WHERE tableSchema = 'public' " +
-         "AND tableName = ?1 ")
+         "AND tableName = ?1 " +
+         "AND columnName != 'data' ")
   List<ColumnObj> findByTableName(String table);
 
 }
