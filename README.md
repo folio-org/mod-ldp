@@ -25,8 +25,14 @@ Note that hot-reload can sometimes fail to detect changes in annotations (e.g. `
 ./mvnw clean package
 ```
 
-which will output `target/ldp-0.0.1-SNAPSHOT.jar` that can be run with:
+which will output `target/ldp-0.0.1-SNAPSHOT.jar`
+
+#### Run package:
+
+Assuming you have already set the SPRING_DATASOURCE_PASSWORD as an environment variable:
 
 ```
 java -jar target/ldp-0.0.1-SNAPSHOT.jar
 ```
+
+The port can be changed by passing a command-line option `--server.port=8090`
