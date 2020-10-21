@@ -7,7 +7,7 @@ ENV VERTICLE_FILE mod-ldp.jar
 ENV VERTICLE_HOME /usr/verticles
 
 # Copy your fat jar to the container
-COPY target/${VERTICLE_FILE} ${VERTICLE_HOME}/${VERTICLE_FILE}
+COPY target/mod-ldp-*.jar ${VERTICLE_HOME}/${VERTICLE_FILE}
 
 # Expose this port locally in the container.
 EXPOSE 8001
