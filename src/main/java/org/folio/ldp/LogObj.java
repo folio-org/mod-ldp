@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "log", schema="ldpsystem")
+@Table(name = "log", schema="dbsystem")
 public class LogObj implements Serializable {
     @Id
     private Timestamp logTime;

@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "tables", schema="ldpsystem")
+@Table(name = "tables", schema="dbsystem")
 public class TableObj implements Serializable {
     @Id
     // private Timestamp updated;
