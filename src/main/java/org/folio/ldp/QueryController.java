@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(value = "/ldp/db/query", produces = MediaType.APPLICATION_JSON_VALUE)
 public class QueryController {
   @Autowired private JdbcTemplate jdbc;

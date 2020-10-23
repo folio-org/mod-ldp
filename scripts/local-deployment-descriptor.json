@@ -1,0 +1,5 @@
+{
+  "srvcId": "mod-ldp-0.0.1-SNAPSHOT",
+  "instId": "mod-ldp-0.0.1-SNAPSHOT-on-host",
+  "url": "http://192.168.56.1:8001"
+}
