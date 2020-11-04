@@ -7,17 +7,19 @@ spring:
   jackson:
     serialization:
       indent_output: true
-  # jpa:  
-    # hibernate:  
+  jpa:
+    # hibernate:
     #   ddl-auto: create  
-    # database-platform: org.hibernate.dialect.PostgreSQLDialect  
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
   datasource:  
     url: "jdbc:postgresql://glintcore.net:5432/folio_snapshot"
     username: ldp  
     password: <>
+    # continue-on-error: true
     # Keep the connection alive if idle for a long time (needed in production)
     testWhileIdle: true
     validationQuery: SELECT 1
     hikari:
-      # connectionTimeout: 20000
+      connectionTimeout: 20000
+      initialization-fail-timeout: -1
       maximumPoolSize: 5
