@@ -15,7 +15,7 @@ spring:
     url: "jdbc:postgresql://glintcore.net:5432/folio_snapshot"
     username: ldp  
     password: <>
-    # continue-on-error: true
+    continue-on-error: true
     # Keep the connection alive if idle for a long time (needed in production)
     testWhileIdle: true
     validationQuery: SELECT 1
