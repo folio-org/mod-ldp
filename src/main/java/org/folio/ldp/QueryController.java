@@ -5,6 +5,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -105,7 +106,7 @@ public class QueryController {
           int columnCount = rsmd.getColumnCount();
           
           while (rs.next()) {
-            Map<String, Object> row = new HashMap<>();
+            LinkedHashMap<String, Object> row = new LinkedHashMap<>();
             for (int i = 1; i <= columnCount; i++) {
               // Note that the index is 1-based
               String colName = rsmd.getColumnName(i);
