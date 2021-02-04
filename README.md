@@ -2,18 +2,21 @@
 
 Current functionality is limited to retrieving all logs from the folio_release database, dbsystem.log table. See [application.yml](src/main/resources/application.yml) for configuration. 
 
-#### Install:
+#### Clone
+
 ```
 git clone https://github.com/library-data-platform/mod-ldp.git
 ```
 
-Set password like so before running any commands:
+#### Run with hot-reload:
+
+
+Set database password like so before running the server:
 
 ```
 export SPRING_DATASOURCE_PASSWORD=yourPasswordHere
 ```
 
-#### Run with hot-reload:
 ```
 ./mvnw spring-boot:run
 ```
@@ -36,3 +39,21 @@ java -jar target/ldp-0.0.1-SNAPSHOT.jar
 ```
 
 The port can be changed by passing a command-line option `--server.port=8090`
+
+# Install to Okapi locally
+
+```
+./mvnw generate-resources
+
+cd scripts
+./okapi-1-declare-mod.sh
+./okapi-2-deploy-mod.sh
+./okapi-3-enable-mod-for-tenant.sh
+```
+
+Assign permission to user ((doc)[https://github.com/folio-org/stripes-cli/blob/master/doc/user-guide.md#interacting-with-okapi]):
+
+```
+stripes okapi login diku_admin --okapi http://localhost:9130 --tenant diku
+stripes perm assign --name ldp.read --user diku_admin --okapi http://localhost:9130 --tenant diku
+```
