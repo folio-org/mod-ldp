@@ -31,7 +31,7 @@ public class ColumnObjController {
     List<ColumnObj> columns = (List<ColumnObj>) columnRepository.findByTableName(table);
     Map<String, String> columnMap = new HashMap<String, String>();
     for(ColumnObj col : columns) {
-      columnMap.put(col.columnName, col.ordinalPosition);
+      columnMap.put(col.columnName, col.data_type);
     }
     return columnMap;
   }

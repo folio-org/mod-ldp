@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
 import com.healthmarketscience.sqlbuilder.CustomSql;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
+import com.healthmarketscience.sqlbuilder.custom.postgresql.PgBinaryCondition;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
@@ -62,8 +63,9 @@ public class QueryController {
     // DbColumn custIdCol = customerTable.addColumn("cust_id", "number", null);
     
     Map<String, String> availableColumns = columnController.getColumnsForTableAsMap(query.tableName);
+    // System.out.println(availableColumns);
     SelectQuery selectQuery = (new SelectQuery()).addCustomFromTable(query.tableName);
-      
+
     if(query.showColumns == null || query.showColumns.isEmpty()) {
       selectQuery.addAllColumns();
     } else {
@@ -74,12 +76,15 @@ public class QueryController {
     
     for (ColumnFilter col : query.columnFilters) {
       if(col == null || col.key == "" || col.key == null || col.value == "" || col.value == null) { continue; }
-      selectQuery = selectQuery.addCondition(BinaryCondition.equalTo(new CustomSql(col.key), col.value));
+
+      if(availableColumns.get(col.key).equals("character varying")) {
+        selectQuery = selectQuery.addCondition(PgBinaryCondition.iLike(new CustomSql(col.key), "%"+col.value+"%"));
+      } else {
+        selectQuery = selectQuery.addCondition(BinaryCondition.equalTo(new CustomSql(col.key), col.value));
+      }
     }
-
+    
     String selectQueryStr = selectQuery.validate().toString();
-
-    System.out.println(query.showColumns);
     System.out.println(selectQueryStr);
     String rawQueryContent = selectQueryStr;
 

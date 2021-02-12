@@ -19,6 +19,7 @@ import javax.persistence.Table;
 public class ColumnObj implements Serializable {
     @Id
     public String columnName;
+    public String data_type;
     public String ordinalPosition;
     private String tableSchema;
     private String tableName;
