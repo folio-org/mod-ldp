@@ -40,7 +40,7 @@ java -jar target/ldp-0.0.1-SNAPSHOT.jar
 
 The port can be changed by passing a command-line option `--server.port=8090`
 
-# Install to Okapi locally
+## Install to Okapi locally
 
 ```
 ./mvnw generate-resources
@@ -56,4 +56,25 @@ Assign permission to user ((doc)[https://github.com/folio-org/stripes-cli/blob/m
 ```
 stripes okapi login diku_admin --okapi http://localhost:9130 --tenant diku
 stripes perm assign --name ldp.read --user diku_admin --okapi http://localhost:9130 --tenant diku
+```
+
+
+## Build and run with Docker
+
+Build the jar:
+
+```
+mvn package
+```
+
+Build the docker image:
+
+```
+docker build -t mod-ldp .
+```
+
+Run the docker container:
+
+```
+docker run -p 8001:8001 -e SPRING_DATASOURCE_PASSWORD=yourPasswordHere --rm mod-ldp
 ```
