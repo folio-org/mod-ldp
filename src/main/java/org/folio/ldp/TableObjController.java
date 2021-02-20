@@ -17,8 +17,7 @@ public class TableObjController {
   
   @GetMapping
   public List<TableObj> getTableObjs() {
-    // System.out.println("getTableObjs");
-    return (List<TableObj>) tableRepository.findAll();
+    return (List<TableObj>) tableRepository.getAllTablesBySchema();
   }
 
   @Cacheable(cacheNames="tableMap")

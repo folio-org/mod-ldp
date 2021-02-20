@@ -12,6 +12,7 @@ class ColumnFilter {
 
 @ToString
 class TableQuery {
+  public String schema;
   public String tableName;
   public List<ColumnFilter> columnFilters;
   public List<String> showColumns;

@@ -15,11 +15,10 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "tables", schema="dbsystem")
+@Table(name = "tables", schema="information_schema")
 public class TableObj implements Serializable {
     @Id
     // private Timestamp updated;
     public String tableName;
-    private String documentationUrl;
-    private String rowCount;
+    private String tableSchema;
 }

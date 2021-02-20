@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -43,7 +44,14 @@ public class QueryController {
   @PostMapping
   public List<Map<String, Object>> postQuery(@RequestBody QueryObj queryObj, HttpServletResponse response) {
     TableQuery query = queryObj.tables.get(0);
-    if(query.tableName == "") {
+
+    ArrayList<String> schemaWhitelist = new ArrayList<String>(Arrays.asList("public", "local", "folio_reporting"));
+    if(!schemaWhitelist.contains(query.schema)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: Parameter `schema` value '" + query.schema + 
+        "' not found in whitelist: "+ schemaWhitelist);
+    }
+
+    if(query.tableName.equals("")) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: Parameter `tableName` is required");
     }
     if(query.tableName.length() > 100) {
@@ -62,9 +70,9 @@ public class QueryController {
     // DbTable customerTable = schema.addTable(query.tableName);
     // DbColumn custIdCol = customerTable.addColumn("cust_id", "number", null);
     
-    Map<String, String> availableColumns = columnController.getColumnsForTableAsMap(query.tableName);
+    Map<String, String> availableColumns = columnController.getColumnsForTableAsMap(query.schema, query.tableName);
     // System.out.println(availableColumns);
-    SelectQuery selectQuery = (new SelectQuery()).addCustomFromTable(query.tableName);
+    SelectQuery selectQuery = (new SelectQuery()).addCustomFromTable(query.schema + '.' + query.tableName);
 
     if(query.showColumns == null || query.showColumns.isEmpty()) {
       selectQuery.addAllColumns();
