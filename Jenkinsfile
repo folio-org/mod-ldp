@@ -2,7 +2,7 @@ buildMvn {
   publishModDescriptor = true
   doApiDoc = true
   mvnDeploy = true
-  runLintRamlCop = true
+  doApiLint = true
   doKubeDeploy = false
   buildNode = 'jenkins-agent-java11'
 
