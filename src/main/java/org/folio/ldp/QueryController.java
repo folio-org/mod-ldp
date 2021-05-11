@@ -18,6 +18,7 @@ import com.healthmarketscience.sqlbuilder.BinaryCondition;
 import com.healthmarketscience.sqlbuilder.CustomSql;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
 import com.healthmarketscience.sqlbuilder.custom.postgresql.PgBinaryCondition;
+import com.healthmarketscience.sqlbuilder.custom.mysql.MysLimitClause;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
@@ -92,6 +93,12 @@ public class QueryController {
       }
     }
     
+    if (query.limit != null) {
+      System.err.println("adding limit");
+      System.err.println(query.limit);
+      selectQuery.addCustomization(new MysLimitClause(query.limit));
+    }
+
     String selectQueryStr = selectQuery.validate().toString();
     System.out.println(selectQueryStr);
     String rawQueryContent = selectQueryStr;

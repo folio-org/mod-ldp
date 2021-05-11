@@ -16,6 +16,7 @@ class TableQuery {
   public String tableName;
   public List<ColumnFilter> columnFilters;
   public List<String> showColumns;
+  public Integer limit;
 }
 
 @ToString
