@@ -35,7 +35,7 @@ which will output `target/ldp-0.0.1-SNAPSHOT.jar`
 Assuming you have already set the SPRING_DATASOURCE_PASSWORD as an environment variable:
 
 ```
-java -jar target/ldp-0.0.1-SNAPSHOT.jar
+java -jar target/mod-ldp-0.0.1-SNAPSHOT.jar
 ```
 
 The port can be changed by passing a command-line option `--server.port=8090`
