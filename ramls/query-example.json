@@ -1,0 +1,22 @@
+{
+  "tables": [
+    {
+      "schema": "public",
+      "tableName": "user_users",
+      "columnFilters": [
+        {
+          "key": "active",
+          "value": "true"
+        }
+      ],
+      "showColumns": [
+        "active",
+        "barcode",
+        "type",
+        "username"
+      ],
+      "orderBy": [],
+      "limit": 1000
+    }
+  ]
+}
