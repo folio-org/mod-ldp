@@ -94,8 +94,6 @@ public class QueryController {
     }
     
     if (query.limit != null) {
-      System.err.println("adding limit");
-      System.err.println(query.limit);
       selectQuery.addCustomization(new MysLimitClause(query.limit));
     }
 
