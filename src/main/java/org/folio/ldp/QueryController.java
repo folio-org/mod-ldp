@@ -38,6 +38,10 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping(value = "/ldp/db/query", produces = MediaType.APPLICATION_JSON_VALUE)
 public class QueryController {
+  private String quote(String s) {
+    return "\"" + s + "\"";
+  }
+
   @Autowired private JdbcTemplate jdbc;
   @Autowired private TableObjController tableController;
   @Autowired private ColumnObjController columnController;
@@ -79,7 +83,7 @@ public class QueryController {
       selectQuery.addAllColumns();
     } else {
       for (String col : query.showColumns) {
-        selectQuery = selectQuery.addCustomColumns(new CustomSql(col));
+        selectQuery = selectQuery.addCustomColumns(new CustomSql(quote(col)));
       }
     }
     
@@ -87,9 +91,9 @@ public class QueryController {
       if(col == null || col.key == "" || col.key == null || col.value == "" || col.value == null) { continue; }
 
       if(availableColumns.get(col.key).equals("character varying")) {
-        selectQuery = selectQuery.addCondition(PgBinaryCondition.iLike(new CustomSql(col.key), "%"+col.value+"%"));
+        selectQuery = selectQuery.addCondition(PgBinaryCondition.iLike(new CustomSql(quote(col.key)), "%"+col.value+"%"));
       } else {
-        selectQuery = selectQuery.addCondition(BinaryCondition.equalTo(new CustomSql(col.key), col.value));
+        selectQuery = selectQuery.addCondition(BinaryCondition.equalTo(new CustomSql(quote(col.key)), quote(col.value)));
       }
     }
     
