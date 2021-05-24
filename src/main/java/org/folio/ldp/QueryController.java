@@ -89,12 +89,7 @@ public class QueryController {
     
     for (ColumnFilter col : query.columnFilters) {
       if(col == null || col.key == "" || col.key == null || col.value == "" || col.value == null) { continue; }
-
-      if(availableColumns.get(col.key).equals("character varying")) {
-        selectQuery = selectQuery.addCondition(PgBinaryCondition.iLike(new CustomSql(quote(col.key)), "%"+col.value+"%"));
-      } else {
-        selectQuery = selectQuery.addCondition(BinaryCondition.equalTo(new CustomSql(quote(col.key)), quote(col.value)));
-      }
+      selectQuery = selectQuery.addCondition(BinaryCondition.equalTo(new CustomSql(quote(col.key)), col.value));
     }
     
     if (query.limit != null) {
