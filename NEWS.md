@@ -8,5 +8,6 @@
 * Quote column names in SQL queries. Fixes #12.
 * Use exact matching instead of pattern matching. Fixes #13.
 * Support `orderBy` in query structure. Fixes #14.
+* Add "checkstyle" linting support (disabled) to the `pom.xml`. Fixes #9. Note that there are many lint errors: the plugin is disabled until I have time to look at these and decide which to fix and which are the result of silly rules.
 * Initial release
 
