@@ -50,14 +50,34 @@
           },
           "orderBy": {
             "type": "array",
-            "description": "An ordered list of column by which to sort",
+            "description": "An ordered list of criteria to sort be",
             "items": {
-              "type": "string",
-              "description": "The name of a column within the specified table"
+              "type": "object",
+              "description": "A single sorting criterion",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "description": "The name of a column within the specified table"
+                },
+                "direction": {
+                  "type": "string",
+                  "enum": ["asc", "desc"],
+                  "description": "Indication of which direction to sort this column [default: 'asc']"
+                },
+                "nulls": {
+                  "type": "string",
+                  "enum": ["start", "end"],
+                  "description": "Indication of where null values should sort [default: 'end']"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "key"
+              ]
             }
           },
           "limit": {
-            "type": "integer",
+            "type": ["integer", "string"],
             "description": "The maximum number of rows to return"
           }
         },

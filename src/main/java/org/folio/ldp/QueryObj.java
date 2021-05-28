@@ -11,11 +11,19 @@ class ColumnFilter {
 }
 
 @ToString
+class OrderingCriterion {
+  public String key;
+  public String direction;
+  public String nulls;
+}
+
+@ToString
 class TableQuery {
   public String schema;
   public String tableName;
   public List<ColumnFilter> columnFilters;
   public List<String> showColumns;
+  public List<OrderingCriterion> orderBy;
   public Integer limit;
 }
 

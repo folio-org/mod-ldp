@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
 import com.healthmarketscience.sqlbuilder.CustomSql;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
+import com.healthmarketscience.sqlbuilder.OrderObject.Dir;
 import com.healthmarketscience.sqlbuilder.custom.postgresql.PgBinaryCondition;
 import com.healthmarketscience.sqlbuilder.custom.mysql.MysLimitClause;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
@@ -91,7 +92,16 @@ public class QueryController {
       if(col == null || col.key == "" || col.key == null || col.value == "" || col.value == null) { continue; }
       selectQuery = selectQuery.addCondition(BinaryCondition.equalTo(new CustomSql(quote(col.key)), col.value));
     }
-    
+
+    if (query.orderBy != null) {
+      for (OrderingCriterion ord : query.orderBy) {
+        if(ord == null || ord.key == "" || ord.key == null) { continue; }
+        Dir dir = (ord.direction.equals("desc")) ? Dir.DESCENDING : Dir.ASCENDING;
+        selectQuery = selectQuery.addCustomOrdering(new CustomSql(quote(ord.key)), dir);
+        // XXX There seems to be no way to have ord.nulls specify where null values should sort
+      }
+    }
+
     if (query.limit != null) {
       selectQuery.addCustomization(new MysLimitClause(query.limit));
     }

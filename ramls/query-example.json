@@ -15,8 +15,19 @@
         "type",
         "username"
       ],
-      "orderBy": [],
-      "limit": 1000
+      "orderBy": [
+        {
+          "key": "username",
+          "direction": "asc",
+          "nulls": "end"
+        },
+        {
+          "key": "barcode",
+          "direction": "desc",
+          "nulls": "start"
+        }
+      ],
+      "limit": "1000"
     }
   ]
 }
