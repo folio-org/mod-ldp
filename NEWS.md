@@ -1,4 +1,4 @@
-## (IN PROGRESS)
+## 0.0.2 2021-06-18
 
 * Create [RAML file](ramls/ldp.raml), and associated [JSON Schemas and example files](ramls), describing the WSAPI. Fixes #5.
 * Write [WSAPI overview documentation](ramls/overview.md). Fixes #6.
