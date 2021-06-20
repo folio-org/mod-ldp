@@ -21,7 +21,7 @@ documentation:
             body:
               application/json:
                 type: !include tables-schema.json
-                example: !include tables-example.json
+                example: !include examples/tables-example.json
     /columns:
       description: "Columns in their table"
       get:
@@ -42,7 +42,7 @@ documentation:
             body:
               application/json:
                 type: !include columns-schema.json
-                example: !include columns-example.json
+                example: !include examples/columns-example.json
     /query:
       description: "Query the LDP service"
       post:
@@ -50,10 +50,10 @@ documentation:
         body:
           application/json:
             type: !include query-schema.json
-            example: !include query-example.json
+            example: !include examples/query-example.json
         responses:
           200:
             body:
               application/json:
                 type: !include results-schema.json
-                example: !include results-example.json
+                example: !include examples/results-example.json
