@@ -1,8 +1,14 @@
 # mod-ldp
 
+Copyright (C) 2020-2021 The Open Library Foundation
+
+This software is distributed under the terms of the Apache License,
+Version 2.0. See the file "[LICENSE](LICENSE)" for more information.
+
+
 ## Overview
 
-`mod-ldp` is a FOLIO module that mediates access to the Library Data Platform (LDP). It removes the need to deal directly with a relational database by providing a simple WSAPI that can be used by UI code such as [`ui-ldp`](https://github.com/library-data-platform/ui-ldp).
+`mod-ldp` is a FOLIO module that mediates access to the [Library Data Platform](https://github.com/library-data-platform/ldp) (LDP). It removes the need to deal directly with a relational database by providing a simple WSAPI that can be used by UI code such as [`ui-ldp`](https://github.com/library-data-platform/ui-ldp).
 
 The WSAPI is described in machine-readable form by [a RAML file](ramls/ldp.raml) and [its associated JSON Schemas and example documents](ramls). Auto-generated human-readable documentation will in due course become available at https://dev.folio.org/reference/api/ but until then it can be read, in two different but equivalent forms, at:
 * https://s3.amazonaws.com/foliodocs/api/mod-ldp/ldp.html
@@ -10,7 +16,7 @@ The WSAPI is described in machine-readable form by [a RAML file](ramls/ldp.raml)
 
 (There is also undocmented and incomplete functionality to retrieve logs from the `folio_release` database, `dbsystem.log` table.)
 
-See [`application.yml`](src/main/resources/application.yml) for configuration. 
+See [`application.yml`](src/main/resources/application.yml) for configuration.
 
 ## Clone, build, run
 
@@ -72,3 +78,18 @@ Run the docker container:
 ```
 docker run -p 8001:8001 -e SPRING_DATASOURCE_PASSWORD=yourPasswordHere --rm mod-ldp
 ```
+
+## Additional information
+
+### Other documentation
+
+[Library Data Platform](https://github.com/library-data-platform/ldp) (LDP)
+-- an open source platform for analytics in libraries.
+
+[ui-ldp](https://github.com/library-data-platform/ui-ldp)
+-- LDP query builder UI for FOLIO/ReShare
+
+### Issue tracker
+
+The project use this GitHub [issue tracker](https://github.com/library-data-platform/mod-ldp/issues).
+

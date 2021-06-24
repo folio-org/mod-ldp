@@ -9,11 +9,11 @@ spring:
       indent_output: true
   jpa:
     # hibernate:
-    #   ddl-auto: create  
+    #   ddl-auto: create
     database-platform: org.hibernate.dialect.PostgreSQL95Dialect
-  datasource:  
+  datasource:
     url: "jdbc:postgresql://glintcore.net:5432/folio_snapshot"
-    username: ldp  
+    username: ldp
     password: <>
     continue-on-error: true
     # Keep the connection alive if idle for a long time (needed in production)

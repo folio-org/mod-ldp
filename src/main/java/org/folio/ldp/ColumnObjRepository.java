@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 // schema-table combination in the database
 
 public interface ColumnObjRepository extends JpaRepository<ColumnObj, String> {
-  
+
   @Query("FROM #{#entityName} " +
          "WHERE tableSchema = ?1 " +
          "AND tableName = ?2 " +

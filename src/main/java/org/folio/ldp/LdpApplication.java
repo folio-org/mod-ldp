@@ -16,9 +16,9 @@ public class LdpApplication {
 
   private static final Logger log = LoggerFactory.getLogger(LdpApplication.class);
 
-	public static void main(String[] args) {
-		SpringApplication.run(LdpApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(LdpApplication.class, args);
+  }
 
 
   // @Bean
