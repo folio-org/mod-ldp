@@ -1,5 +1,11 @@
 # mod-ldp
 
+Copyright (C) 2020-2021 The Open Library Foundation
+
+This software is distributed under the terms of the Apache License,
+Version 2.0. See the file "[LICENSE](LICENSE)" for more information.
+
+
 ## Overview
 
 `mod-ldp` is a FOLIO module that mediates access to the Library Data Platform (LDP). It removes the need to deal directly with a relational database by providing a simple WSAPI that can be used by UI code such as [`ui-ldp`](https://github.com/library-data-platform/ui-ldp).
