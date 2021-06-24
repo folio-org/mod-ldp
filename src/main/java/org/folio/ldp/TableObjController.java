@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/ldp/db/tables")
 public class TableObjController {
   @Autowired TableObjRepository tableRepository;
-  
+
   @GetMapping
   public List<TableObj> getTableObjs() {
     return (List<TableObj>) tableRepository.getAllTablesBySchema();

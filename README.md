@@ -16,7 +16,7 @@ The WSAPI is described in machine-readable form by [a RAML file](ramls/ldp.raml)
 
 (There is also undocmented and incomplete functionality to retrieve logs from the `folio_release` database, `dbsystem.log` table.)
 
-See [`application.yml`](src/main/resources/application.yml) for configuration. 
+See [`application.yml`](src/main/resources/application.yml) for configuration.
 
 ## Clone, build, run
 

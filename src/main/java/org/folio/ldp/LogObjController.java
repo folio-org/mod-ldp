@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/ldp/db/log")
 public class LogObjController {
   @Autowired LogObjRepository logRepository;
-  
+
   @GetMapping
   public List<LogObj> getLogObjs() {
       return (List<LogObj>) logRepository.findAll();

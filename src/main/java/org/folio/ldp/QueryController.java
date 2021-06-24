@@ -55,7 +55,7 @@ public class QueryController {
 
     ArrayList<String> schemaWhitelist = new ArrayList<String>(Arrays.asList("public", "local", "folio_reporting"));
     if(!schemaWhitelist.contains(query.schema)) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: Parameter `schema` value '" + query.schema + 
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: Parameter `schema` value '" + query.schema +
         "' not found in whitelist: "+ schemaWhitelist);
     }
 
@@ -77,7 +77,7 @@ public class QueryController {
     // DbSchema schema = spec.addDefaultSchema();
     // DbTable customerTable = schema.addTable(query.tableName);
     // DbColumn custIdCol = customerTable.addColumn("cust_id", "number", null);
-    
+
     Map<String, String> availableColumns = columnController.getColumnsForTableAsMap(query.schema, query.tableName);
     // System.out.println(availableColumns);
     SelectQuery selectQuery = (new SelectQuery()).addCustomFromTable(query.schema + '.' + query.tableName);
@@ -89,7 +89,7 @@ public class QueryController {
         selectQuery = selectQuery.addCustomColumns(new CustomSql(quote(col)));
       }
     }
-    
+
     for (ColumnFilter col : query.columnFilters) {
       if(col == null || col.key == "" || col.key == null || col.value == "" || col.value == null) { continue; }
       selectQuery = selectQuery.addCondition(BinaryCondition.equalTo(new CustomSql(quote(col.key)), col.value));
@@ -120,7 +120,7 @@ public class QueryController {
     //      PreparedStatement ps = conn.prepareStatement(query);
     // 5) SetString() for each value, eliminating SQL injection
     //      ps.setString(1,list.get(0));
-    
+
 
     final String queryContent;
     if (!rawQueryContent.toLowerCase().contains("limit")) {
@@ -134,7 +134,7 @@ public class QueryController {
           List<Map<String, Object>> rows = new ArrayList<>();
           ResultSetMetaData rsmd = rs.getMetaData();
           int columnCount = rsmd.getColumnCount();
-          
+
           while (rs.next()) {
             LinkedHashMap<String, Object> row = new LinkedHashMap<>();
             for (int i = 1; i <= columnCount; i++) {
@@ -149,7 +149,7 @@ public class QueryController {
             rows.add(row);
           }
           return rows;
-        }      
+        }
     });
     return content;
   }

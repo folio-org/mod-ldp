@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/ldp/db/columns")
 public class ColumnObjController {
   @Autowired ColumnObjRepository columnRepository;
-  
+
   @GetMapping
   public List<ColumnObj> getColumnsForTable(String schema, String table) {
 
@@ -25,7 +25,7 @@ public class ColumnObjController {
 
   @Cacheable(cacheNames="columns")
   public Map<String, String> getColumnsForTableAsMap(String schema, String table) {
-    
+
     // TODO: Validate table string
 
     List<ColumnObj> columns = (List<ColumnObj>) columnRepository.findByTableName(schema, table);
