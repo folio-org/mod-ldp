@@ -87,5 +87,9 @@ docker run -p 8001:8001 -e SPRING_DATASOURCE_PASSWORD=yourPasswordHere --rm mod-
 -- an open source platform for analytics in libraries.
 
 [ui-ldp](https://github.com/library-data-platform/ui-ldp)
--- LDP query builder UI for FOLIO/ReShare 
+-- LDP query builder UI for FOLIO/ReShare
+
+### Issue tracker
+
+The project use this GitHub [issue tracker](issues).
 
