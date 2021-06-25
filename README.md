@@ -95,11 +95,13 @@ The project uses this GitHub [issue tracker](https://github.com/library-data-pla
 
 ### Code analysis
 
-[SonarQube analysis](https://sonarcloud.io/dashboard?id=org.folio%3Amod-ldp).
+FOLIO [SonarQube analysis](https://sonarcloud.io/dashboard?id=org.folio%3Amod-ldp).
 
 ### Download and configuration
 
 The built artifacts for this module are available.
-See [configuration](https://dev.folio.org/download/artifacts) for repository access,
+
+* FOLIO notes:
+[configuration](https://dev.folio.org/download/artifacts) for repository access,
 and the [Docker image](https://hub.docker.com/r/folioorg/mod-ldp/).
 
