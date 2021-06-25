@@ -91,5 +91,5 @@ docker run -p 8001:8001 -e SPRING_DATASOURCE_PASSWORD=yourPasswordHere --rm mod-
 
 ### Issue tracker
 
-The project use this GitHub [issue tracker](https://github.com/library-data-platform/mod-ldp/issues).
+The project uses this GitHub [issue tracker](https://github.com/library-data-platform/mod-ldp/issues).
 
