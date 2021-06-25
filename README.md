@@ -93,3 +93,13 @@ docker run -p 8001:8001 -e SPRING_DATASOURCE_PASSWORD=yourPasswordHere --rm mod-
 
 The project uses this GitHub [issue tracker](https://github.com/library-data-platform/mod-ldp/issues).
 
+### Code analysis
+
+[SonarQube analysis](https://sonarcloud.io/dashboard?id=org.folio%3Amod-ldp).
+
+### Download and configuration
+
+The built artifacts for this module are available.
+See [configuration](https://dev.folio.org/download/artifacts) for repository access,
+and the [Docker image](https://hub.docker.com/r/folioorg/mod-ldp/).
+
