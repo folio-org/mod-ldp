@@ -34,6 +34,8 @@ If the password has not been configured in the [`application.yml`](src/main/reso
 env SPRING_DATASOURCE_PASSWORD=swordfish123 java -jar target/mod-ldp-0.0.1-SNAPSHOT.jar
 ```
 
+If running `mod-ldp` locally, you will likely run into CORS problems with Stripes refusing to make GET and POST requests to it because OPTIONS requests don't return the necessary `Access-control-allow-origin` header. To work around this, you can run a CORS-permissive HTTP proxy such as [`local-cors-anywhere`](https://github.com/dkaoster/local-cors-anywhere) -- which by default listens on port 8080 -- and access the running `mod-ldp` at http://localhost:8080/http://localhost:8001.
+
 It's also possible to run with hot-reload (although note that hot-reload can sometimes fail to detect changes in annotations (e.g. `@Data`), in which case a `clean` is needed to re-compile):
 
 ```
