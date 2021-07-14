@@ -1,6 +1,6 @@
 package org.folio.ldp;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +29,7 @@ public class ColumnObjController {
     // TODO: Validate table string
 
     List<ColumnObj> columns = (List<ColumnObj>) columnRepository.findByTableName(schema, table);
-    Map<String, String> columnMap = new HashMap<String, String>();
+    Map<String, String> columnMap = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
     for(ColumnObj col : columns) {
       columnMap.put(col.columnName, col.data_type);
     }
