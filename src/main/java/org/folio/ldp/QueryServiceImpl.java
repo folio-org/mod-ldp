@@ -32,7 +32,7 @@ public class QueryServiceImpl implements QueryService {
     }
 
     for (ColumnFilter col : query.columnFilters) {
-      if(col == null || col.key == "" || col.key == null || col.value == "" || col.value == null) {
+      if(col == null || col.key.equals("") || col.key == null || col.value.equals("") || col.value == null) {
          continue; 
       }
       selectQuery = selectQuery.addCondition(
@@ -41,7 +41,7 @@ public class QueryServiceImpl implements QueryService {
 
     if (query.orderBy != null) {
       for (OrderingCriterion ord : query.orderBy) {
-        if(ord == null || ord.key == "" || ord.key == null) { continue; }
+        if(ord == null || ord.key.equals("") || ord.key == null) { continue; }
         Dir dir = (ord.direction.equals("desc")) ? Dir.DESCENDING : Dir.ASCENDING;
         NullOrder nulls = (ord.nulls.equals("start")) ? NullOrder.FIRST : NullOrder.LAST;
         OrderObject oo = new OrderObject(dir, quote(ord.key)).setNullOrder(nulls);

@@ -9,23 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-
-import javax.persistence.Table;
-import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletResponse;
-
-import com.healthmarketscience.sqlbuilder.BinaryCondition;
-import com.healthmarketscience.sqlbuilder.CustomSql;
-import com.healthmarketscience.sqlbuilder.SelectQuery;
-import com.healthmarketscience.sqlbuilder.OrderObject;
-import com.healthmarketscience.sqlbuilder.OrderObject.Dir;
-import com.healthmarketscience.sqlbuilder.OrderObject.NullOrder;
-import com.healthmarketscience.sqlbuilder.custom.postgresql.PgBinaryCondition;
-import com.healthmarketscience.sqlbuilder.custom.mysql.MysLimitClause;
-import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
-import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema;
-import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
-import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,9 +44,11 @@ public class QueryController {
     if(query.tableName.equals("")) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: Parameter `tableName` is required");
     }
+
     if(query.tableName.length() > 100) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: Parameter `tableName` is too long");
     }
+
     // Validate table name as whitelisted
     Map<String, Boolean> tables = tableController.getTablesAsMap();
     Boolean isValidTableName = tables.get(query.tableName);
