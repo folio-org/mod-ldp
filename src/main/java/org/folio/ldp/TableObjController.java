@@ -1,6 +1,6 @@
 package org.folio.ldp;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public class TableObjController {
   @Cacheable(cacheNames="tableMap")
   public Map<String, Boolean> getTablesAsMap() {
     List<TableObj> tables = (List<TableObj>) tableRepository.findAll();
-    Map<String, Boolean> tableMap = new HashMap<String, Boolean>();
+    Map<String, Boolean> tableMap = new TreeMap<String, Boolean>(String.CASE_INSENSITIVE_ORDER);
     for(TableObj table : tables) {
       tableMap.put(table.tableName, true);
     }
