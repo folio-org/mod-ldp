@@ -124,6 +124,121 @@ public class QueryControllerTest {
   
   }
 
+  @Test
+  public void queryBadSchema() throws Exception{
+    /*
+    Payload:
+
+        {
+        "tables": [
+          {
+            "schema": "doodoo",
+            "tableName": "user_users",
+            "columnFilters": [
+              {}
+            ],
+            "showColumns": [],
+            "orderBy": [],
+            "limit": 101
+          }
+        ]
+      }
+    */
+    String jsonString = 
+    "{\"tables\":[{\"schema\":\"doodoo\",\"tableName\":\"user_users\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
+    mvc.perform(post(QUERY_PATH)
+      .contentType("application/json")
+      .content(jsonString))
+        .andExpect(status().is4xxClientError());
+
+  }
+
+  @Test
+  public void queryBadTable() throws Exception{
+    /*
+    Payload:
+
+        {
+        "tables": [
+          {
+            "schema": "public",
+            "tableName": "doodoo_doodooos",
+            "columnFilters": [
+              {}
+            ],
+            "showColumns": [],
+            "orderBy": [],
+            "limit": 101
+          }
+        ]
+      }
+    */
+    String jsonString = 
+    "{\"tables\":[{\"schema\":\"doodoo\",\"tableName\":\"doodoo_doodoos\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
+    mvc.perform(post(QUERY_PATH)
+      .contentType("application/json")
+      .content(jsonString))
+        .andExpect(status().is4xxClientError());
+  }
+
+  @Test
+  public void queryBadTableLength() throws Exception{
+    /*
+    Payload:
+
+        {
+        "tables": [
+          {
+            "schema": "public",
+            "tableName": "toooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobig",
+            "columnFilters": [
+              {}
+            ],
+            "showColumns": [],
+            "orderBy": [],
+            "limit": 10000
+          }
+        ]
+      }
+    */
+    String jsonString = 
+    "{\"tables\":[{\"schema\":\"doodoo\",\"tableName\":\"toooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobig\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
+    mvc.perform(post(QUERY_PATH)
+      .contentType("application/json")
+      .content(jsonString))
+        .andExpect(status().is4xxClientError());
+
+  }
+
+  @Test
+  public void queryNoTable() throws Exception{
+    /*
+    Payload:
+
+        {
+        "tables": [
+          {
+            "schema": "public",
+            "tableName": "",
+            "columnFilters": [
+              {}
+            ],
+            "showColumns": [],
+            "orderBy": [],
+            "limit": 101
+          }
+        ]
+      }
+    */
+    String jsonString = 
+    "{\"tables\":[{\"schema\":\"doodoo\",\"tableName\":\"\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
+    mvc.perform(post(QUERY_PATH)
+      .contentType("application/json")
+      .content(jsonString))
+        .andExpect(status().is4xxClientError());
+  }
+
+
   @Test 
   public void testQueryGeneration() throws Exception {
     TableQuery tableQuery = new TableQuery();
