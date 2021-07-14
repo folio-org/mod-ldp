@@ -31,12 +31,14 @@ public class QueryServiceImpl implements QueryService {
       }
     }
 
-    for (ColumnFilter col : query.columnFilters) {
-      if(col == null || col.key == null || col.key.equals("") || col.value == null || col.value.equals("") ) {
-         continue; 
+    if(query.columnFilters != null) {
+      for (ColumnFilter col : query.columnFilters) {
+        if(col == null || col.key == null || col.key.equals("") || col.value == null || col.value.equals("") ) {
+          continue; 
+        }
+        selectQuery = selectQuery.addCondition(
+          BinaryCondition.equalTo(new CustomSql(quote(col.key)), col.value));
       }
-      selectQuery = selectQuery.addCondition(
-        BinaryCondition.equalTo(new CustomSql(quote(col.key)), col.value));
     }
 
     if (query.orderBy != null) {

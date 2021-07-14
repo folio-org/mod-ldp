@@ -18,6 +18,8 @@ import org.junit.runner.RunWith;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -238,6 +240,36 @@ public class QueryControllerTest {
         .andExpect(status().is4xxClientError());
   }
 
+  @Test
+  public void queryNoLimit() throws Exception{
+    /*
+    Payload:
+
+        {
+        "tables": [
+          {
+            "schema": "public",
+            "tableName": "user_users",
+            "columnFilters": [
+              {}
+            ],
+            "showColumns": [],
+            "orderBy": []
+          }
+        ]
+      }
+    */
+    String jsonString = 
+    "{\"tables\":[{\"schema\":\"public\",\"tableName\":\"user_users\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[]}]}";
+    mvc.perform(post(QUERY_PATH)
+      .contentType("application/json")
+      .content(jsonString))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(3)));
+        //probably check to see limit changed to 500?
+
+  }
+
 
   @Test 
   public void testQueryGeneration() throws Exception {
@@ -265,9 +297,35 @@ public class QueryControllerTest {
    
     final String expectedQuery = "SELECT \"_version\",\"hrid\",\"index_title\",\"source\",\"status_updated_date\" FROM public.inventory_instances WHERE ((\"_version\" = '2') AND (\"source\" = 'MARC')) ORDER BY \"index_title\" ASC NULLS LAST,\"status_updated_date\" DESC NULLS LAST LIMIT 1001";
 
-    assertEquals(query, expectedQuery);
-    
+    assertEquals(query, expectedQuery);  
 
+  }
+
+  @Test 
+  public void testQueryGenNoColumns() throws Exception {
+    TableQuery tableQuery = new TableQuery();
+    tableQuery.schema = "public";
+    tableQuery.tableName = "inventory_instances";
+    
+    List<String> showColumns = new ArrayList<>();
+    List<OrderingCriterion> orderBy = new ArrayList<>();
+    
+    showColumns.add("_version");
+    showColumns.add("hrid");
+    showColumns.add("index_title");
+    showColumns.add("source");
+    showColumns.add("status_updated_date");
+    orderBy.add(new OrderingCriterion("index_title", "asc", "end"));
+    orderBy.add(new OrderingCriterion("status_updated_date", "desc", "end"));
+    
+    tableQuery.showColumns = showColumns;
+    tableQuery.orderBy = orderBy;
+    tableQuery.limit = 1001;
+
+    String query = queryService.generateQuery(tableQuery);
+
+    assertNotNull(query);
+    assertNotEquals("", query);
   }
 
 
