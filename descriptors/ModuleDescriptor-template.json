@@ -42,8 +42,21 @@
       }
     },
     "env": [
-      { "name": "JAVA_OPTIONS",
+      {
+        "name": "JAVA_OPTIONS",
         "value": "-XX:MaxRAMPercentage=66.0"
+      },
+      {
+        "name": "SPRING_DATASOURCE_URL",
+        "value": "jdbc:postgresql://glintcore.net:5432/folio_snapshot"
+      },
+      {
+        "name": "SPRING_DATASOURCE_USERNAME",
+        "value": "ldp"
+      },
+      {
+        "name": "SPRING_DATASOURCE_PASSWORD",
+        "value": "XXX change this for deployment!"
       }
     ]
   }
