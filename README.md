@@ -91,6 +91,10 @@ docker run -p 8001:8001 -e SPRING_DATASOURCE_PASSWORD=yourPasswordHere --rm mod-
 [ui-ldp](https://github.com/library-data-platform/ui-ldp)
 -- LDP query builder UI for FOLIO/ReShare
 
+### Code of Conduct
+
+Refer to the Wiki [FOLIO Code of Conduct](https://wiki.folio.org/display/COMMUNITY/FOLIO+Code+of+Conduct).
+
 ### Issue tracker
 
 The project uses this GitHub [issue tracker](https://github.com/library-data-platform/mod-ldp/issues).
