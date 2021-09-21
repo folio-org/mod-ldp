@@ -54,7 +54,9 @@ public class ColumnObjControllerTest {
       }
   }
 
+  @Autowired
   private MockMvc mvc;
+  
   public final static String QUERY_PATH = "/ldb/db/columns";
 
   @Autowired
