@@ -8,11 +8,17 @@ spring:
     serialization:
       indent_output: true
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: none
-    database-platform: org.hibernate.dialect.H2Dialect
+#     ddl-auto: none
+     ddl-auto: create-drop
+#    database-platform: org.hibernate.dialect.H2Dialect
+      
   datasource:
-    url: "jdbc:h2:mem:testdb;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE"
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
+#    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+#    driver-class-name: org.postgresl.Driver
+#    url: "jdbc:tc:postgresql:12-alpine///test"
+#    url: "jdbc:h2:mem:testdb;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE"
+#    username: sa
+#    password: password
+#    driverClassName: org.h2.Driver
