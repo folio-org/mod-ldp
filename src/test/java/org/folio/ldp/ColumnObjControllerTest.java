@@ -34,7 +34,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 @AutoConfigureMockMvc
 public class ColumnObjControllerTest {
-  @Autowired
+  
 
   @ClassRule
   public static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:12-alpine")
@@ -54,7 +54,9 @@ public class ColumnObjControllerTest {
       }
   }
 
+  @Autowired
   private MockMvc mvc;
+  
   public final static String QUERY_PATH = "/ldb/db/columns";
 
   @Autowired
