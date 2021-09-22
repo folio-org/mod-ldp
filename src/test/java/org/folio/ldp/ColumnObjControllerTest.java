@@ -34,8 +34,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 @AutoConfigureMockMvc
 public class ColumnObjControllerTest {
-  @Autowired
-
+  
   @ClassRule
   public static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:12-alpine")
     .withDatabaseName("integration-tests-db")
@@ -56,8 +55,8 @@ public class ColumnObjControllerTest {
 
   @Autowired
   private MockMvc mvc;
-  
-  public final static String QUERY_PATH = "/ldb/db/columns";
+
+  public final static String QUERY_PATH = "/ldp/db/columns";
 
   @Autowired
   private ColumnObjController coController;
@@ -75,8 +74,8 @@ public class ColumnObjControllerTest {
 
   @Test
   public void getColumns() throws Exception {
-    List<ColumnObj> colList = coController.getColumnsForTable("public", "users_user");
-    assertEquals(11,colList.size());
+    List<ColumnObj> colList = coController.getColumnsForTable("public", "user_users");
+    assertEquals(10,colList.size());
 
   }
 
