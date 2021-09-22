@@ -57,7 +57,7 @@ public class ColumnObjControllerTest {
   @Autowired
   private MockMvc mvc;
   
-  public final static String QUERY_PATH = "/ldb/db/columns";
+  public final static String QUERY_PATH = "/ldp/db/columns";
 
   @Autowired
   private ColumnObjController coController;
@@ -75,9 +75,8 @@ public class ColumnObjControllerTest {
 
   @Test
   public void getColumns() throws Exception {
-    List<ColumnObj> colList = coController.getColumnsForTable("public", "users_user");
-    assertEquals(11,colList.size());
-
+    List<ColumnObj> colList = coController.getColumnsForTable("public", "user_users");
+    assertEquals(10,colList.size()); //ignores 'data' column
   }
 
   @Test 
