@@ -18,6 +18,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.ClassRule;
 
 import java.util.List;
@@ -26,12 +28,11 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ContextConfiguration(initializers = {ColumnObjControllerTest.Initializer.class})
+@ContextConfiguration(initializers = {TableObjControllerTest.Initializer.class})
 @Sql({"/drop-schema.sql", "/schema.sql","/data.sql"})
 
 @AutoConfigureMockMvc
-public class ColumnObjControllerTest {
-  
+public class TableObjControllerTest {
 
   @ClassRule
   public static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:12-alpine")
@@ -53,32 +54,32 @@ public class ColumnObjControllerTest {
 
   @Autowired
   private MockMvc mvc;
-  
-  public final static String QUERY_PATH = "/ldp/db/columns";
 
   @Autowired
-  private ColumnObjController coController;
-
+  private TableObjRepository tableObjRepository;
   
+  public final static String QUERY_PATH = "/ldp/db/tables";
+
   @Test 
-  public void getMVCColumns() throws Exception {
+  public void getMVCTables() throws Exception {
     mvc.perform(get(QUERY_PATH)
-      .contentType("application/json")
-      .param("schema", "public")
-      .param("table", "user_users"))
+      .contentType("application/json"))
         .andExpect(status().isOk());
   }
-  
 
   @Test
-  public void getColumns() throws Exception {
-    List<ColumnObj> colList = coController.getColumnsForTable("public", "user_users");
-    assertEquals(10,colList.size()); //ignores 'data' column
+  public void getTables() throws Exception {
+    List<TableObj> tableList = tableObjRepository.findAll();
+    boolean foundTable = false;
+    for(TableObj to : tableList) {
+      if(to.tableName.equals("user_users")) {
+        foundTable = true;
+      }
+    }
+    assertTrue(foundTable);
   }
 
-  @Test 
-  public void getColumnsAsMap() throws Exception {
 
-  }
+
   
 }
