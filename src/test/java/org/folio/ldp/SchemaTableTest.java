@@ -15,13 +15,10 @@ import org.springframework.test.context.jdbc.Sql;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
+
 import org.junit.ClassRule;
 
 import org.testcontainers.containers.PostgreSQLContainer;
-
-import schemacrawler.schema.Column;
 
 import java.sql.Connection;
 import java.util.List;
@@ -30,11 +27,10 @@ import javax.sql.DataSource;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ContextConfiguration(initializers = {SchemaColumnTest.Initializer.class})
+@ContextConfiguration(initializers = {SchemaTableTest.Initializer.class})
 @Sql({"/drop-schema.sql", "/schema.sql","/data.sql"})
 @AutoConfigureMockMvc
-public class SchemaColumnTest {
-
+public class SchemaTableTest {
   @ClassRule
   public static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:12-alpine")
     .withDatabaseName("integration-tests-db")
@@ -56,11 +52,14 @@ public class SchemaColumnTest {
   private ApplicationContext context;
 
   @Test
-  public void getColumns() throws Exception {
+  public void getTables() throws Exception {
     DataSource ds = (DataSource)context.getBean("dataSource");
     Connection conn = ds.getConnection();
-    List<ColumnObj> columnList = SchemaUtil.getColumnsByTableName(conn, "public", "user_users");
-    assertEquals(11, columnList.size());
-  }
-  
+    CrawlTableObjRepository ctor = new CrawlTableObjRepository();
+    ctor.setConnection(conn);
+    List<TableObj> tableList = ctor.getAllTablesBySchema();
+    for(TableObj t : tableList) {
+      System.out.print(t.getTableName() + ", " + t.getTableSchema());
+    }   
+  }  
 }
