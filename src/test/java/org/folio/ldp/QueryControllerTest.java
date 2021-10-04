@@ -50,9 +50,12 @@ public class QueryControllerTest {
     implements ApplicationContextInitializer<ConfigurableApplicationContext> {
       public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
           TestPropertyValues.of(
-            "spring.datasource.url=" + postgreSQLContainer.getJdbcUrl(),
-            "spring.datasource.username=" + postgreSQLContainer.getUsername(),
-            "spring.datasource.password=" + postgreSQLContainer.getPassword()
+            //"spring.datasource.url=" + postgreSQLContainer.getJdbcUrl(),
+            //"spring.datasource.username=" + postgreSQLContainer.getUsername(),
+            //"spring.datasource.password=" + postgreSQLContainer.getPassword()
+            "dbinfo.url=" + postgreSQLContainer.getJdbcUrl(),
+            "dbinfo.user=" + postgreSQLContainer.getUsername(),
+            "dbinfo.pass=" + postgreSQLContainer.getPassword()
           ).applyTo(configurableApplicationContext.getEnvironment());
       }
   }
