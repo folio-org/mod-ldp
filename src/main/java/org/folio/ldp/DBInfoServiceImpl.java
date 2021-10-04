@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 //@ConfigurationProperties("dbinfo")
 public class DBInfoServiceImpl  implements DBInfoService {
 
+
+  //TODO - These need to be changed to instead query the default datasource
+  
   @Value("${dbinfo.url}")
   String url;
   @Value("${dbinfo.user}")

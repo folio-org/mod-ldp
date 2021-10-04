@@ -24,7 +24,7 @@ public class SchemaUtil {
 
     catalog = SchemaCrawlerUtility.getCatalog(conn, options);
     for( final Schema schema : catalog.getSchemas()) {
-      if(!schemaNameList.contains(schema.getName())) {
+      if(schemaNameList != null && !schemaNameList.contains(schema.getName())) {
         //System.out.println(schema.getName() + " is not a valid schema");
         continue;
       } else {
@@ -59,12 +59,14 @@ public class SchemaUtil {
             continue;
           } else {
             for( final Column column : table.getColumns()) {
+              if(column.getName().equals("data")) {
+                continue; //We don't return the data column per convention
+              }
               ColumnObj columnObj = new ColumnObj();
               columnObj.columnName = column.getName();
               columnObj.data_type = column.getType().toString();
               columnObj.setTableSchema(schemaName);
               columnObj.setTableName(tableName);
-
               System.out.println("Column: " + column.getName());
               columnObjList.add(columnObj);
             }

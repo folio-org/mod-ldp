@@ -35,16 +35,17 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(initializers = {QueryControllerTest.Initializer.class})
-@Sql({"/drop-schema.sql", "/schema.sql","/data.sql"})
+//@Sql({"/drop-schema.sql", "/schema.sql","/data.sql"})
 
 @AutoConfigureMockMvc
 public class QueryControllerTest {
 
   @ClassRule
-  public static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:12-alpine")
-    .withDatabaseName("integration-tests-db")
+  public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:12-alpine")
+    .withDatabaseName("query-integration-tests-db")
     .withUsername("sa")
-    .withPassword("sa");
+    .withPassword("sa")
+    .withInitScript("drop-and-create.sql");
 
   static class Initializer
     implements ApplicationContextInitializer<ConfigurableApplicationContext> {
