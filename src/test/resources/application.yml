@@ -8,10 +8,14 @@ spring:
     serialization:
       indent_output: true
   jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: none
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
 #     ddl-auto: none
-     ddl-auto: create-drop
+#     ddl-auto: create-drop
 #    database-platform: org.hibernate.dialect.H2Dialect
       
   datasource:

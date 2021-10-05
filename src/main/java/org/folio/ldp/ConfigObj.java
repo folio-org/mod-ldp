@@ -19,8 +19,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "config")
 public class ConfigObj {
   @Id
-  private String id;
-
   @NonNull
   private String key;
 

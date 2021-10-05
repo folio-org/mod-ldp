@@ -55,6 +55,6 @@ public class TenantInitTest {
       .contentType("application/json")
       .header("X-Okapi-Tenant", "diku")
       .content(jsonString))
-        .andExpect(status().isOk());
+        .andExpect(status().is(201));
   }
 }
