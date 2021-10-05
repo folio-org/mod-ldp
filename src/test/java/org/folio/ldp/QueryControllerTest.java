@@ -36,7 +36,6 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @SpringBootTest
 @ContextConfiguration(initializers = {QueryControllerTest.Initializer.class})
 //@Sql({"/drop-schema.sql", "/schema.sql","/data.sql"})
-
 @AutoConfigureMockMvc
 public class QueryControllerTest {
 
@@ -97,6 +96,7 @@ public class QueryControllerTest {
     "{\"tables\":[{\"schema\":\"public\",\"tableName\":\"user_users\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
     mvc.perform(post(QUERY_PATH)
       .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku") 
       .content(jsonString))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(3)));
@@ -145,6 +145,7 @@ public class QueryControllerTest {
     mvc.perform(
       post(QUERY_PATH)
         .contentType("application/json")
+        .header("X-Okapi-Tenant", "diku")
         .content(jsonString))
           .andExpect(status().isOk())
           .andExpect(jsonPath("$", hasSize(3)));
@@ -175,6 +176,7 @@ public class QueryControllerTest {
     "{\"tables\":[{\"schema\":\"doodoo\",\"tableName\":\"user_users\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
     mvc.perform(post(QUERY_PATH)
       .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
       .content(jsonString))
         .andExpect(status().is4xxClientError());
 
@@ -204,6 +206,7 @@ public class QueryControllerTest {
     "{\"tables\":[{\"schema\":\"doodoo\",\"tableName\":\"doodoo_doodoos\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
     mvc.perform(post(QUERY_PATH)
       .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
       .content(jsonString))
         .andExpect(status().is4xxClientError());
   }
@@ -232,6 +235,7 @@ public class QueryControllerTest {
     "{\"tables\":[{\"schema\":\"doodoo\",\"tableName\":\"toooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobig\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
     mvc.perform(post(QUERY_PATH)
       .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
       .content(jsonString))
         .andExpect(status().is4xxClientError());
 
@@ -261,6 +265,7 @@ public class QueryControllerTest {
     "{\"tables\":[{\"schema\":\"doodoo\",\"tableName\":\"\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
     mvc.perform(post(QUERY_PATH)
       .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
       .content(jsonString))
         .andExpect(status().is4xxClientError());
   }
@@ -288,6 +293,7 @@ public class QueryControllerTest {
     "{\"tables\":[{\"schema\":\"public\",\"tableName\":\"user_users\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[]}]}";
     mvc.perform(post(QUERY_PATH)
       .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
       .content(jsonString))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(3)));

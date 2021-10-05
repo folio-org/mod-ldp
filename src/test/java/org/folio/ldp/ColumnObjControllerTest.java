@@ -67,6 +67,7 @@ public class ColumnObjControllerTest {
   public void getMVCColumns() throws Exception {
     mvc.perform(get(QUERY_PATH)
       .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
       .param("schema", "public")
       .param("table", "user_users"))
         .andExpect(status().isOk());

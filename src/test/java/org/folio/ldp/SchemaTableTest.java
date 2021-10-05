@@ -65,7 +65,8 @@ public class SchemaTableTest {
   @Test
   public void getTables() throws Exception {
     Map<String, String> dbMap = dbInfoService.getDBInfo();
-    DriverManagerDataSource dmds = new DriverManagerDataSource(dbMap.get("url"), dbMap.get("user"), dbMap.get("pass"));
+    DriverManagerDataSource dmds = new DriverManagerDataSource(dbMap.get("url"),
+     dbMap.get("user"), dbMap.get("pass"));
     dmds.setDriverClassName("org.postgresql.Driver");
     CrawlTableObjRepository ctor = new CrawlTableObjRepository();
     ctor.setConnection(dmds.getConnection());
@@ -78,7 +79,8 @@ public class SchemaTableTest {
   @Test
   public void getMVCTables() throws Exception {
     mvc.perform(get(QUERY_PATH)
-      .contentType("application/json"))
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku"))
         .andExpect(status().isOk());
   }
 }
