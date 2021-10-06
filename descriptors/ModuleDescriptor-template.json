@@ -47,16 +47,24 @@
         "value": "-XX:MaxRAMPercentage=66.0"
       },
       {
-        "name": "SPRING_DATASOURCE_URL",
-        "value": "jdbc:postgresql://glintcore.net:5432/folio_snapshot"
+        "name" : "DB_HOST",
+        "value" : "postgres"
       },
       {
-        "name": "SPRING_DATASOURCE_USERNAME",
-        "value": "ldp"
+        "name" : "DB_PORT",
+        "value" : "5432"
       },
       {
-        "name": "SPRING_DATASOURCE_PASSWORD",
-        "value": "XXX change this for deployment!"
+        "name" : "DB_USERNAME",
+        "value" : "folio_admin"
+      },
+      { 
+        "name" : "DB_PASSWORD",
+        "value" : "folio_admin"
+      },
+      {
+        "name" : "DB_DATABASE",
+        "value" : "okapi_modules"
       }
     ]
   }
