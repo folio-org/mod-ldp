@@ -16,38 +16,30 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Test;
-import org.junit.Before;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.ClassRule;
 
 import java.util.List;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 
-import org.json.JSONObject;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ContextConfiguration(initializers = {ColumnObjControllerTest.Initializer.class})
-//@Sql({"/drop-schema.sql", "/schema.sql","/data.sql"})
+@ContextConfiguration(initializers = {TableObjControllerTest.Initializer.class})
+@Sql({"/drop-schema.sql", "/schema.sql","/data.sql"})
 
 @AutoConfigureMockMvc
-public class ColumnObjControllerTest {
-  
+public class TableObjControllerTest {
 
   @ClassRule
-  public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:12-alpine")
-    .withDatabaseName("query-integration-tests-db")
+  public static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:12-alpine")
+    .withDatabaseName("integration-tests-db")
     .withUsername("sa")
     .withPassword("sa");
-  
-  @ClassRule
-  public static PostgreSQLContainer<?> externalPostgreSQLContainer = new PostgreSQLContainer<>("postgres:12-alpine")
-    .withDatabaseName("external-test-db")
-    .withUsername("sa")
-    .withPassword("sa")
-    .withInitScript("drop-and-create.sql");
+
 
   static class Initializer
     implements ApplicationContextInitializer<ConfigurableApplicationContext> {
@@ -60,53 +52,34 @@ public class ColumnObjControllerTest {
       }
   }
 
-  @Autowired private MockMvc mvc;
+  @Autowired
+  private MockMvc mvc;
 
-  public final static String QUERY_PATH = "/ldp/db/columns";
-
-  @Autowired private ColumnObjController coController;
-
-
-  @Autowired ConfigObjRepository configObjRepo;
-
+  @Autowired
+  private TableObjRepository tableObjRepository;
   
-  @Before
-  public void testSetup() {
-    ConfigObj config = new ConfigObj();
-    JSONObject dbJson = new JSONObject();
-    dbJson.put("url", externalPostgreSQLContainer.getJdbcUrl());
-    dbJson.put("user", externalPostgreSQLContainer.getUsername());
-    dbJson.put("pass", externalPostgreSQLContainer.getPassword());
-    config.setTenant("diku");
-    config.setKey("dbinfo");
-    config.setValue(dbJson);
-    
-    configObjRepo.save(config);
-  }
+  public final static String QUERY_PATH = "/ldp/db/tables";
 
   @Test 
-  public void getMVCColumns() throws Exception {
+  public void getMVCTables() throws Exception {
     mvc.perform(get(QUERY_PATH)
-      .contentType("application/json")
-      .header("X-Okapi-Tenant", "diku")
-      .param("schema", "public")
-      .param("table", "user_users"))
+      .contentType("application/json"))
         .andExpect(status().isOk());
   }
-  
 
   @Test
-  public void getColumns() throws Exception {
-    TenantContext.setCurrentTenant("diku");
-    List<ColumnObj> colList = coController.getColumnsForTable("public", "user_users");
-    assertEquals(10,colList.size());
-    TenantContext.clear();
-
+  public void getTables() throws Exception {
+    List<TableObj> tableList = tableObjRepository.findAll();
+    boolean foundTable = false;
+    for(TableObj to : tableList) {
+      if(to.tableName.equals("user_users")) {
+        foundTable = true;
+      }
+    }
+    assertTrue(foundTable);
   }
 
-  @Test 
-  public void getColumnsAsMap() throws Exception {
 
-  }
+
   
 }

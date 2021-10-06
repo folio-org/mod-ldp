@@ -103,7 +103,7 @@ public class QueryController {
               // Note that the index is 1-based
               String colName = rsmd.getColumnName(i);
 
-              if(colName == "data") { continue; }
+              if(colName.equals("data")) { continue; }
 
               Object colVal = rs.getObject(i);
               row.put(colName, colVal);
