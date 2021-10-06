@@ -10,12 +10,14 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,13 +28,31 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping(value = "/ldp/db/query", produces = MediaType.APPLICATION_JSON_VALUE)
 public class QueryController {
 
-  @Autowired private JdbcTemplate jdbc;
-  @Autowired private TableObjController tableController;
-  //@Autowired private ColumnObjController columnController;
-  @Autowired private QueryService queryService;
+  private JdbcTemplate jdbc;
+  
+  @Autowired
+  private TableObjController tableController;
+  
+  @Autowired 
+  private QueryService queryService;
+  
+  @Autowired
+  private DBInfoService dbInfoService;
 
   @PostMapping
   public List<Map<String, Object>> postQuery(@RequestBody QueryObj queryObj, HttpServletResponse response) {
+    String tenantId = TenantContext.getCurrentTenant();
+    Map<String, String> dbMap = dbInfoService.getDBInfo(tenantId);
+
+    if(dbMap == null) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection information. Make sure the values are populated");
+    }
+
+    DriverManagerDataSource dmds = new DriverManagerDataSource(dbMap.get("url"), dbMap.get("user"), dbMap.get("pass"));
+    dmds.setDriverClassName("org.postgresql.Driver");
+
+    jdbc = new JdbcTemplate(dmds);
+    
     TableQuery query = queryObj.tables.get(0);
 
     ArrayList<String> schemaWhitelist = new ArrayList<String>(Arrays.asList("public", "local", "folio_reporting"));

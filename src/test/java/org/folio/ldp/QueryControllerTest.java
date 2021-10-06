@@ -16,9 +16,12 @@ import jdk.jfr.Timestamp;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.ClassRule;
+
+import org.json.JSONObject;
 
 import org.junit.runner.RunWith;
 import static org.hamcrest.Matchers.*;
@@ -35,16 +38,22 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(initializers = {QueryControllerTest.Initializer.class})
-@Sql({"/drop-schema.sql", "/schema.sql","/data.sql"})
-
+//@Sql({"/drop-schema.sql", "/schema.sql","/data.sql"})
 @AutoConfigureMockMvc
 public class QueryControllerTest {
 
   @ClassRule
-  public static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:12-alpine")
-    .withDatabaseName("integration-tests-db")
+  public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:12-alpine")
+    .withDatabaseName("query-integration-tests-db")
     .withUsername("sa")
     .withPassword("sa");
+  
+  @ClassRule
+  public static PostgreSQLContainer<?> externalPostgreSQLContainer = new PostgreSQLContainer<>("postgres:12-alpine")
+    .withDatabaseName("external-test-db")
+    .withUsername("sa")
+    .withPassword("sa")
+    .withInitScript("drop-and-create.sql");
 
   static class Initializer
     implements ApplicationContextInitializer<ConfigurableApplicationContext> {
@@ -64,10 +73,26 @@ public class QueryControllerTest {
   private QueryController queryController;
 
   @Autowired
+  private ConfigObjRepository configObjRepo;
+
+  @Autowired
   private QueryService queryService;
 
   public final static String QUERY_PATH = "/ldp/db/query";
 
+  @Before
+  public void testSetup() {
+    ConfigObj config = new ConfigObj();
+    JSONObject dbJson = new JSONObject();
+    dbJson.put("url", externalPostgreSQLContainer.getJdbcUrl());
+    dbJson.put("user", externalPostgreSQLContainer.getUsername());
+    dbJson.put("pass", externalPostgreSQLContainer.getPassword());
+    config.setTenant("diku");
+    config.setKey("dbinfo");
+    config.setValue(dbJson);
+    
+    configObjRepo.save(config);
+  }
 
   @Test
   public void queryAllUsers() throws Exception{
@@ -89,10 +114,12 @@ public class QueryControllerTest {
         ]
       }
     */
+    
     String jsonString = 
     "{\"tables\":[{\"schema\":\"public\",\"tableName\":\"user_users\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
     mvc.perform(post(QUERY_PATH)
       .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku") 
       .content(jsonString))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(3)));
@@ -137,10 +164,12 @@ public class QueryControllerTest {
       ]
     }
     */
+    
     String jsonString = "{\"tables\":[{\"schema\":\"public\",\"tableName\":\"user_users\",\"columnFilters\":[{\"key\":\"active\",\"value\":\"false\"}],\"showColumns\":[\"active\",\"barcode\",\"type\",\"username\"],\"orderBy\":[{\"key\":\"username\",\"direction\":\"asc\",\"nulls\":\"end\"},{\"key\":\"barcode\",\"direction\":\"desc\",\"nulls\":\"start\"}],\"limit\":\"1000\"}]}" ;
     mvc.perform(
       post(QUERY_PATH)
         .contentType("application/json")
+        .header("X-Okapi-Tenant", "diku")
         .content(jsonString))
           .andExpect(status().isOk())
           .andExpect(jsonPath("$", hasSize(3)));
@@ -171,6 +200,7 @@ public class QueryControllerTest {
     "{\"tables\":[{\"schema\":\"doodoo\",\"tableName\":\"user_users\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
     mvc.perform(post(QUERY_PATH)
       .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
       .content(jsonString))
         .andExpect(status().is4xxClientError());
 
@@ -200,6 +230,7 @@ public class QueryControllerTest {
     "{\"tables\":[{\"schema\":\"doodoo\",\"tableName\":\"doodoo_doodoos\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
     mvc.perform(post(QUERY_PATH)
       .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
       .content(jsonString))
         .andExpect(status().is4xxClientError());
   }
@@ -228,6 +259,7 @@ public class QueryControllerTest {
     "{\"tables\":[{\"schema\":\"doodoo\",\"tableName\":\"toooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobigtoooooooooooooobig\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
     mvc.perform(post(QUERY_PATH)
       .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
       .content(jsonString))
         .andExpect(status().is4xxClientError());
 
@@ -257,6 +289,7 @@ public class QueryControllerTest {
     "{\"tables\":[{\"schema\":\"doodoo\",\"tableName\":\"\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
     mvc.perform(post(QUERY_PATH)
       .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
       .content(jsonString))
         .andExpect(status().is4xxClientError());
   }
@@ -284,6 +317,7 @@ public class QueryControllerTest {
     "{\"tables\":[{\"schema\":\"public\",\"tableName\":\"user_users\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[]}]}";
     mvc.perform(post(QUERY_PATH)
       .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
       .content(jsonString))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(3)));
@@ -347,6 +381,37 @@ public class QueryControllerTest {
 
     assertNotNull(query);
     assertNotEquals("", query);
+  }
+
+  @Test
+  public void queryBadTenant() throws Exception{
+    /*
+    Payload:
+
+        {
+        "tables": [
+          {
+            "schema": "public",
+            "tableName": "user_users",
+            "columnFilters": [
+              {}
+            ],
+            "showColumns": [],
+            "orderBy": [],
+            "limit": 101
+          }
+        ]
+      }
+    */
+    
+    String jsonString = 
+    "{\"tables\":[{\"schema\":\"public\",\"tableName\":\"user_users\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
+    mvc.perform(post(QUERY_PATH)
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "deeeeku") 
+      .content(jsonString))
+        .andExpect(status().is(500));
+
   }
 
 

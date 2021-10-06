@@ -8,13 +8,15 @@ spring:
     serialization:
       indent_output: true
   jpa:
-    # hibernate:
-    #   ddl-auto: create
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: create-drop
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-    url: "jdbc:postgresql://glintcore.net:5432/folio_snapshot"
-    username: ldp
-    password: <>
+    url: "jdbc:postgresql://${DB_HOSTNAME}:${DB_PORT}/${DB_NAME}"
+    username: ${DB_USER}
+    password: ${DB_PASS}
     continue-on-error: true
     # Keep the connection alive if idle for a long time (needed in production)
     testOnBorrow: true
