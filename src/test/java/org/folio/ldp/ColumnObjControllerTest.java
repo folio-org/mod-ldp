@@ -93,6 +93,16 @@ public class ColumnObjControllerTest {
       .param("table", "user_users"))
         .andExpect(status().isOk());
   }
+
+  @Test 
+  public void getMVCColumnsBadTenant() throws Exception {
+    mvc.perform(get(QUERY_PATH)
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "deeeku")
+      .param("schema", "public")
+      .param("table", "user_users"))
+        .andExpect(status().is(500));
+  }
   
 
   @Test

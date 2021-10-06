@@ -107,6 +107,14 @@ public class SchemaTableTest {
       .header("X-Okapi-Tenant", "diku"))
         .andExpect(status().isOk());
   }
+
+  @Test
+  public void getMVCTablesBadTenant() throws Exception {
+    mvc.perform(get(QUERY_PATH)
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "deeeku"))
+        .andExpect(status().is(500));
+  }
 }
 
 

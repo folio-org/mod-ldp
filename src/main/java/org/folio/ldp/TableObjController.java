@@ -28,7 +28,7 @@ public class TableObjController {
       tableRepository.setConnection(getConnection());
     } catch(Exception e) {
       System.out.println("Error getting connection " + e.getLocalizedMessage());
-      return null;
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection information. Make sure the values are populated");
     }
     return (List<TableObj>) tableRepository.getAllTablesBySchema();
   }
@@ -39,7 +39,7 @@ public class TableObjController {
       tableRepository.setConnection(getConnection());
     } catch(Exception e) {
       System.out.println("Error getting connection " + e.getLocalizedMessage());
-      return null;
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection information. Make sure the values are populated");
     }
     List<TableObj> tables = (List<TableObj>) tableRepository.findAll();
     Map<String, Boolean> tableMap = new TreeMap<String, Boolean>(String.CASE_INSENSITIVE_ORDER);

@@ -33,7 +33,7 @@ public class ColumnObjController {
       columnRepository.setConnection(getConnection());
     } catch(Exception e) {
       System.out.println("Error getting connection: " + e.getLocalizedMessage());
-      return null;
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection information. Make sure the values are populated");
     }
     return (List<ColumnObj>) columnRepository.findByTableName(schema, table);
   }
@@ -46,7 +46,7 @@ public class ColumnObjController {
       columnRepository.setConnection(getConnection());
     } catch(Exception e) {
       System.out.println("Error getting connection: " + e.getLocalizedMessage());
-      return null;
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection information. Make sure the values are populated");
     }
     List<ColumnObj> columns = (List<ColumnObj>) columnRepository.findByTableName(schema, table);
     Map<String, String> columnMap = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);

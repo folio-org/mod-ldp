@@ -383,5 +383,36 @@ public class QueryControllerTest {
     assertNotEquals("", query);
   }
 
+  @Test
+  public void queryBadTenant() throws Exception{
+    /*
+    Payload:
+
+        {
+        "tables": [
+          {
+            "schema": "public",
+            "tableName": "user_users",
+            "columnFilters": [
+              {}
+            ],
+            "showColumns": [],
+            "orderBy": [],
+            "limit": 101
+          }
+        ]
+      }
+    */
+    
+    String jsonString = 
+    "{\"tables\":[{\"schema\":\"public\",\"tableName\":\"user_users\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
+    mvc.perform(post(QUERY_PATH)
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "deeeeku") 
+      .content(jsonString))
+        .andExpect(status().is(500));
+
+  }
+
 
 }
