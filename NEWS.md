@@ -1,3 +1,7 @@
+## 1.0.0 2021-10-06
+* Add separation by-tenant for LDP DB backend connections (MODLDP-3, MODLDP-4, MODLDP-6)
+* Add health check endpoint (MODLDP-5)
+
 ## 0.0.2 2021-06-18
 
 * Create [RAML file](ramls/ldp.raml), and associated [JSON Schemas and example files](ramls), describing the WSAPI. Fixes #5.
