@@ -13,21 +13,20 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.test.context.jdbc.Sql;
 
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.ClassRule;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 
-import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
-import javax.sql.DataSource;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -97,7 +96,8 @@ public class SchemaTableTest {
     List<TableObj> tableList = ctor.getAllTablesBySchema();
     for(TableObj t : tableList) {
       System.out.print(t.getTableName() + ", " + t.getTableSchema());
-    }   
+    }
+    assertTrue(tableList.size() > 0);   
   }  
 
   @Test

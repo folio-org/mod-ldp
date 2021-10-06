@@ -28,12 +28,10 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping(value = "/ldp/db/query", produces = MediaType.APPLICATION_JSON_VALUE)
 public class QueryController {
 
-  //@Autowired 
   private JdbcTemplate jdbc;
   
   @Autowired
   private TableObjController tableController;
-  //@Autowired private ColumnObjController columnController;
   
   @Autowired 
   private QueryService queryService;
@@ -49,7 +47,7 @@ public class QueryController {
     if(dbMap == null) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection information. Make sure the values are populated");
     }
-    
+
     DriverManagerDataSource dmds = new DriverManagerDataSource(dbMap.get("url"), dbMap.get("user"), dbMap.get("pass"));
     dmds.setDriverClassName("org.postgresql.Driver");
 

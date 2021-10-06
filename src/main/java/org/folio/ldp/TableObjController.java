@@ -18,7 +18,6 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping("/ldp/db/tables")
 public class TableObjController {
-  //@Autowired TableObjRepository tableRepository;
 
   CrawlTableObjRepository tableRepository = new CrawlTableObjRepository();
   @Autowired DBInfoService dbInfoService;

@@ -17,14 +17,6 @@ public class DBInfoServiceImpl  implements DBInfoService {
 
   //TODO - These need to be changed to instead query the default datasource
 
-  /*
-  @Value("${dbinfo.url}")
-  String url;
-  @Value("${dbinfo.user}")
-  String user;
-  @Value("${dbinfo.pass}")
-  String pass;
-  */
 
   @Override
   public Map<String, String> getDBInfo(String tenantId) {

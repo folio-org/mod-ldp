@@ -18,9 +18,6 @@ public class TenantRequestInterceptor extends HandlerInterceptorAdapter {
     String tenantID = request.getHeader(OKAPI_TENANT_HEADER);
     if(tenantID == null) {
       System.out.println("No tenant ID provided");
-      //response.getWriter().write(OKAPI_TENANT_HEADER + " is not present in Request Header");
-      //response.setStatus(400);
-      //return false;
     }
     System.out.println("Tenant ID is set to " + tenantID);
     TenantContext.setCurrentTenant(tenantID);

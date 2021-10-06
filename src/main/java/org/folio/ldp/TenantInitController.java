@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "_tenant")
 public class TenantInitController {
-  @PostMapping ResponseEntity<?> initializeTenant( @RequestBody TenantInitData tid,
+  @PostMapping public ResponseEntity<?> initializeTenant( @RequestBody TenantInitData tid,
    @RequestHeader HttpHeaders headers ) {
     String tenantId = headers.getFirst("X-Okapi-Tenant");
     System.out.println("Tenant initialization for tenant " + tenantId);

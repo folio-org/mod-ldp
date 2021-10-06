@@ -19,7 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping("/ldp/db/columns")
 public class ColumnObjController {
-  //@Autowired ColumnObjRepository columnRepository;
+  
   CrawlColumnObjRepository columnRepository = new CrawlColumnObjRepository();
 
   @Autowired DBInfoService dbInfoService;

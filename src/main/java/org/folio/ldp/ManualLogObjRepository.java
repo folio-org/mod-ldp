@@ -35,7 +35,6 @@ public class ManualLogObjRepository {
   }
 
   public List<LogObj> findAll() {
-    //ArrayList<LogObj> logObjList = new ArrayList<>();
     try { 
       initDB();
     } catch(Exception e) {
