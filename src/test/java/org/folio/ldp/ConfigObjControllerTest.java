@@ -91,6 +91,33 @@ public class ConfigObjControllerTest {
   }
 
   @Test
+  public void setAndOverwriteMVC() throws Exception {
+    JSONObject dbconf = new JSONObject();
+    dbconf.put("url", postgreSQLContainer.getJdbcUrl());
+    dbconf.put("user", postgreSQLContainer.getUsername());
+    dbconf.put("pass", postgreSQLContainer.getPassword());
+    JSONObject json = new JSONObject();
+    json.put("key", "dbconf");
+    json.put("value", dbconf);
+
+    mvc.perform(put(QUERY_PATH + "/" + "dbconf")
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
+      .content(json.toString()))
+        .andExpect(status().isOk());
+
+    //Do it again
+    dbconf.put("dummy", "dummy");
+
+    mvc.perform(put(QUERY_PATH + "/" + "dbconf")
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
+      .content(json.toString()))
+        .andExpect(status().isOk());
+
+  }
+
+  @Test
   public void testRepo() throws Exception {
     ConfigObj config = new ConfigObj();
     JSONObject json = new JSONObject();
@@ -111,6 +138,7 @@ public class ConfigObjControllerTest {
     assertTrue(newConfig.getValue().getString("foo").equals("pickle"));
 
   }
+
 
   @Test
   public void testHybrid() throws Exception {

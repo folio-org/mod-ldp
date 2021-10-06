@@ -19,9 +19,13 @@ import org.junit.Test;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.ClassRule;
 
 import java.util.List;
+import java.util.Map;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 
@@ -114,9 +118,26 @@ public class ColumnObjControllerTest {
 
   }
 
+
   @Test 
   public void getColumnsAsMap() throws Exception {
+    TenantContext.setCurrentTenant("diku");
+    Map<String, String> columnMap = coController.getColumnsForTableAsMap("public", "user_users");
+    assertFalse(columnMap.isEmpty());
+    TenantContext.clear();
+  }
 
+  @Test 
+  public void getColumnsAsMapBadTenant() throws Exception {
+    Boolean errored = false;
+    TenantContext.setCurrentTenant("deeku");
+    try {
+      Map<String, String> columnMap = coController.getColumnsForTableAsMap("public", "user_users");
+    } catch(Exception e) {
+      errored = true;
+    }
+    TenantContext.clear();
+    assertTrue(errored);
   }
   
 }
