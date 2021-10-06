@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/ldp/db/log")
 public class LogObjController {
-  @Autowired LogObjRepository logRepository;
+  ManualLogObjRepository logRepository = new ManualLogObjRepository();
 
   @GetMapping
   public List<LogObj> getLogObjs() {
