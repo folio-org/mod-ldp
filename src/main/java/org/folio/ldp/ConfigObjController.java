@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/ldp/config")
 public class ConfigObjController {
 
-  @Autowired ConfigObjRepository repo;
-
-  
+  @Autowired ConfigObjRepository repo;  
 
   @GetMapping
   public List<ConfigObj> getConfigObjs() {
@@ -43,22 +41,30 @@ public class ConfigObjController {
   }
 
   @PutMapping(value="/{key}")
-  public ConfigObj updateByKey(@PathVariable String key, @RequestBody ConfigObj entity) {
+  public ConfigObj updateByKey(@PathVariable String key, @RequestBody ConfigObjDTO entity) {
     String tenantId = TenantContext.getCurrentTenant();
     System.out.println("updateByKey called with key " + key + " and tenant " + tenantId);
     ConfigObjId configObjId = new ConfigObjId();
     configObjId.setTenant(tenantId);
     configObjId.setKey(key);
+    ConfigObj returnEntity;
     Optional<ConfigObj> result = repo.findById(configObjId);
     if(result.isPresent()) {
       ConfigObj oldEntity = result.get();
       oldEntity.setValue(entity.getValue());
+      oldEntity.setTenant(tenantId);
       repo.save(oldEntity);
+      returnEntity = oldEntity;
     } else {
+      ConfigObj saveEntity = new ConfigObj();
+      saveEntity.setTenant(tenantId);
+      saveEntity.setKey(entity.getKey());
+      saveEntity.setValue(entity.getValue());
       entity.setTenant(tenantId);
-      repo.save(entity);
+      repo.save(saveEntity);
+      returnEntity = saveEntity;
     }
-    return entity;
+    return returnEntity;
   }
   
 }
