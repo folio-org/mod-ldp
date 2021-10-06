@@ -16,6 +16,7 @@ import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.test.context.jdbc.Sql;
 
 import org.junit.Test;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 
 import org.junit.ClassRule;
@@ -31,6 +32,8 @@ import javax.sql.DataSource;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.json.JSONObject;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(initializers = {SchemaTableTest.Initializer.class})
@@ -39,7 +42,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class SchemaTableTest {
   @ClassRule
   public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:12-alpine")
-    .withDatabaseName("schema-table-integration-tests-db")
+    .withDatabaseName("query-integration-tests-db")
+    .withUsername("sa")
+    .withPassword("sa");
+  
+  @ClassRule
+  public static PostgreSQLContainer<?> externalPostgreSQLContainer = new PostgreSQLContainer<>("postgres:12-alpine")
+    .withDatabaseName("external-test-db")
     .withUsername("sa")
     .withPassword("sa")
     .withInitScript("drop-and-create.sql");
@@ -48,9 +57,9 @@ public class SchemaTableTest {
     implements ApplicationContextInitializer<ConfigurableApplicationContext> {
       public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
           TestPropertyValues.of(
-            "dbinfo.url=" + postgreSQLContainer.getJdbcUrl(),
-            "dbinfo.user=" + postgreSQLContainer.getUsername(),
-            "dbinfo.pass=" + postgreSQLContainer.getPassword()
+            "spring.datasource.url=" + postgreSQLContainer.getJdbcUrl(),
+            "spring.datasource.username=" + postgreSQLContainer.getUsername(),
+            "spring.datasource.password=" + postgreSQLContainer.getPassword()
           ).applyTo(configurableApplicationContext.getEnvironment());
       }
   }
@@ -59,12 +68,27 @@ public class SchemaTableTest {
   @Autowired private ApplicationContext context;
 
   @Autowired DBInfoService dbInfoService;
+  @Autowired ConfigObjRepository configObjRepo;
 
   public final static String QUERY_PATH = "/ldp/db/tables";
 
+  @Before
+  public void testSetup() {
+    ConfigObj config = new ConfigObj();
+    JSONObject dbJson = new JSONObject();
+    dbJson.put("url", externalPostgreSQLContainer.getJdbcUrl());
+    dbJson.put("user", externalPostgreSQLContainer.getUsername());
+    dbJson.put("pass", externalPostgreSQLContainer.getPassword());
+    config.setTenant("diku");
+    config.setKey("dbinfo");
+    config.setValue(dbJson);
+    
+    configObjRepo.save(config);
+  }
+
   @Test
   public void getTables() throws Exception {
-    Map<String, String> dbMap = dbInfoService.getDBInfo();
+    Map<String, String> dbMap = dbInfoService.getDBInfo("diku");
     DriverManagerDataSource dmds = new DriverManagerDataSource(dbMap.get("url"),
      dbMap.get("user"), dbMap.get("pass"));
     dmds.setDriverClassName("org.postgresql.Driver");

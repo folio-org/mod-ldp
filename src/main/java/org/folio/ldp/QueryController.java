@@ -43,7 +43,13 @@ public class QueryController {
 
   @PostMapping
   public List<Map<String, Object>> postQuery(@RequestBody QueryObj queryObj, HttpServletResponse response) {
-    Map<String, String> dbMap = dbInfoService.getDBInfo();
+    String tenantId = TenantContext.getCurrentTenant();
+    Map<String, String> dbMap = dbInfoService.getDBInfo(tenantId);
+
+    if(dbMap == null) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection information. Make sure the values are populated");
+    }
+    
     DriverManagerDataSource dmds = new DriverManagerDataSource(dbMap.get("url"), dbMap.get("user"), dbMap.get("pass"));
     dmds.setDriverClassName("org.postgresql.Driver");
 

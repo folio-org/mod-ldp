@@ -3,6 +3,6 @@ package org.folio.ldp;
 import java.util.Map;
 
 public interface DBInfoService {
-  public abstract Map<String, String> getDBInfo();
+  public abstract Map<String, String> getDBInfo(String tenantId);
   
 }

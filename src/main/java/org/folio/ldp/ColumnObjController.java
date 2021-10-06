@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 @RestController
 @RequestMapping("/ldp/db/columns")
 public class ColumnObjController {
@@ -53,8 +56,14 @@ public class ColumnObjController {
     return columnMap;
   }
 
-  private Connection getConnection() throws SQLException {
-    Map<String, String> dbMap = dbInfoService.getDBInfo();
+  private Connection getConnection() throws SQLException, ResponseStatusException {
+    String tenantId = TenantContext.getCurrentTenant();
+    Map<String, String> dbMap = dbInfoService.getDBInfo(tenantId);
+
+    if(dbMap == null) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection information. Make sure the values are populated");
+    }
+    
     DriverManagerDataSource dmds = new DriverManagerDataSource(dbMap.get("url"), dbMap.get("user"), dbMap.get("pass"));
     dmds.setDriverClassName("org.postgresql.Driver");
     return dmds.getConnection();

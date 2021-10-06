@@ -16,9 +16,12 @@ import jdk.jfr.Timestamp;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.ClassRule;
+
+import org.json.JSONObject;
 
 import org.junit.runner.RunWith;
 import static org.hamcrest.Matchers.*;
@@ -43,6 +46,12 @@ public class QueryControllerTest {
   public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:12-alpine")
     .withDatabaseName("query-integration-tests-db")
     .withUsername("sa")
+    .withPassword("sa");
+  
+  @ClassRule
+  public static PostgreSQLContainer<?> externalPostgreSQLContainer = new PostgreSQLContainer<>("postgres:12-alpine")
+    .withDatabaseName("external-test-db")
+    .withUsername("sa")
     .withPassword("sa")
     .withInitScript("drop-and-create.sql");
 
@@ -50,12 +59,9 @@ public class QueryControllerTest {
     implements ApplicationContextInitializer<ConfigurableApplicationContext> {
       public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
           TestPropertyValues.of(
-            //"spring.datasource.url=" + postgreSQLContainer.getJdbcUrl(),
-            //"spring.datasource.username=" + postgreSQLContainer.getUsername(),
-            //"spring.datasource.password=" + postgreSQLContainer.getPassword()
-            "dbinfo.url=" + postgreSQLContainer.getJdbcUrl(),
-            "dbinfo.user=" + postgreSQLContainer.getUsername(),
-            "dbinfo.pass=" + postgreSQLContainer.getPassword()
+            "spring.datasource.url=" + postgreSQLContainer.getJdbcUrl(),
+            "spring.datasource.username=" + postgreSQLContainer.getUsername(),
+            "spring.datasource.password=" + postgreSQLContainer.getPassword()
           ).applyTo(configurableApplicationContext.getEnvironment());
       }
   }
@@ -67,10 +73,26 @@ public class QueryControllerTest {
   private QueryController queryController;
 
   @Autowired
+  private ConfigObjRepository configObjRepo;
+
+  @Autowired
   private QueryService queryService;
 
   public final static String QUERY_PATH = "/ldp/db/query";
 
+  @Before
+  public void testSetup() {
+    ConfigObj config = new ConfigObj();
+    JSONObject dbJson = new JSONObject();
+    dbJson.put("url", externalPostgreSQLContainer.getJdbcUrl());
+    dbJson.put("user", externalPostgreSQLContainer.getUsername());
+    dbJson.put("pass", externalPostgreSQLContainer.getPassword());
+    config.setTenant("diku");
+    config.setKey("dbinfo");
+    config.setValue(dbJson);
+    
+    configObjRepo.save(config);
+  }
 
   @Test
   public void queryAllUsers() throws Exception{
@@ -92,6 +114,7 @@ public class QueryControllerTest {
         ]
       }
     */
+    
     String jsonString = 
     "{\"tables\":[{\"schema\":\"public\",\"tableName\":\"user_users\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
     mvc.perform(post(QUERY_PATH)
@@ -141,6 +164,7 @@ public class QueryControllerTest {
       ]
     }
     */
+    
     String jsonString = "{\"tables\":[{\"schema\":\"public\",\"tableName\":\"user_users\",\"columnFilters\":[{\"key\":\"active\",\"value\":\"false\"}],\"showColumns\":[\"active\",\"barcode\",\"type\",\"username\"],\"orderBy\":[{\"key\":\"username\",\"direction\":\"asc\",\"nulls\":\"end\"},{\"key\":\"barcode\",\"direction\":\"desc\",\"nulls\":\"start\"}],\"limit\":\"1000\"}]}" ;
     mvc.perform(
       post(QUERY_PATH)
