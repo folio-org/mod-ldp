@@ -24,14 +24,46 @@
           "methods": [ "POST" ],
           "pathPattern" : "/ldp/db/query",
           "permissionsRequired": [ "ldp.read" ]
+        },
+        {
+          "methods" : [ "PUT" ],
+          "pathPattern" : "/ldp/config/{id}",
+          "permissionsRequired" : [ "ldp.config.edit"]
+        },
+        {
+          "methods" : [ "GET" ],
+          "pathPattern" : "/ldp/config*",
+          "permissionsRequired" : [ "ldp.config.read"]
         }
   ]
   } ],
-  "permissionSets": [{
-    "description": "Read LDP data",
-    "displayName": "LDP -- Read",
-    "permissionName": "ldp.read"
-  }],
+  "permissionSets": [
+    {
+      "description": "Read LDP data",
+      "displayName": "LDP -- Read",
+      "permissionName": "ldp.read"
+    },
+    {
+      "description" : "Read LDP configuration data",
+      "displayName": "LDP Config -- Read",
+      "permissionName": "ldp.config.read"
+    },
+    {
+      "description" : "Edit LDP configuration data",
+      "displayName" : "LDP Config -- Edit",
+      "permissionName" : "ldp.config.edit"
+    },
+    {
+      "description" : "All LDP permissions",
+      "displayName" : "LDP -- All",
+      "permissionName" : "ldp.all",
+      "subPermissions" : [
+        "ldp.read",
+        "ldp.config.read",
+        "ldp.config.edit"
+      ]
+    }
+],
   "launchDescriptor" : {
     "dockerImage": "@artifactId@:@version@",
     "dockerPull": false,
