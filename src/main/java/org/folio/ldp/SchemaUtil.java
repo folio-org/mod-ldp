@@ -2,8 +2,10 @@ package org.folio.ldp;
 
 import schemacrawler.tools.utility.SchemaCrawlerUtility;
 import schemacrawler.schemacrawler.SchemaCrawlerOptionsBuilder;
+import schemacrawler.schemacrawler.SchemaInfoLevelBuilder;
 import schemacrawler.schemacrawler.SchemaCrawlerOptions;
 import schemacrawler.schemacrawler.SchemaCrawlerException;
+import schemacrawler.schemacrawler.LoadOptionsBuilder;
 import schemacrawler.schema.Catalog;
 import schemacrawler.schema.Schema;
 import schemacrawler.schema.Table;
@@ -20,7 +22,10 @@ public class SchemaUtil {
   throws SchemaCrawlerException  {
     final Catalog catalog;
     final ArrayList<TableObj> tableObjList = new ArrayList<>();
-    final SchemaCrawlerOptions options = SchemaCrawlerOptionsBuilder.newSchemaCrawlerOptions();
+    final LoadOptionsBuilder loadOptionsBuilder = LoadOptionsBuilder.builder()
+      .withSchemaInfoLevel(SchemaInfoLevelBuilder.minimum());
+    final SchemaCrawlerOptions options = SchemaCrawlerOptionsBuilder.newSchemaCrawlerOptions()
+      .withLoadOptions(loadOptionsBuilder.toOptions());
 
     catalog = SchemaCrawlerUtility.getCatalog(conn, options);
     for( final Schema schema : catalog.getSchemas()) {
@@ -44,7 +49,10 @@ public class SchemaUtil {
    String tableName) throws SchemaCrawlerException {
     final Catalog catalog;
     final ArrayList<ColumnObj> columnObjList = new ArrayList<>();
-    final SchemaCrawlerOptions options = SchemaCrawlerOptionsBuilder.newSchemaCrawlerOptions();
+    final LoadOptionsBuilder loadOptionsBuilder = LoadOptionsBuilder.builder()
+      .withSchemaInfoLevel(SchemaInfoLevelBuilder.standard());
+    final SchemaCrawlerOptions options = SchemaCrawlerOptionsBuilder.newSchemaCrawlerOptions()
+      .withLoadOptions(loadOptionsBuilder.toOptions());
    
     catalog = SchemaCrawlerUtility.getCatalog(conn, options);
     for( final Schema schema : catalog.getSchemas()) {

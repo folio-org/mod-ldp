@@ -19,6 +19,5 @@ public class TenantInitController {
     System.out.println("module from version " + tid.module_from);
     return ResponseEntity.status(201).body(null);
   }
-
-  
+    
 }
