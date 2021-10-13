@@ -50,7 +50,15 @@ public class SchemaUtil {
     final Catalog catalog;
     final ArrayList<ColumnObj> columnObjList = new ArrayList<>();
     final LoadOptionsBuilder loadOptionsBuilder = LoadOptionsBuilder.builder()
-      .withSchemaInfoLevel(SchemaInfoLevelBuilder.standard());
+      .withSchemaInfoLevel(SchemaInfoLevelBuilder.builder()
+        .setRetrieveTables(true)
+        .setRetrieveTableColumns(true)
+        .setRetrieveAdditionalColumnAttributes(false)
+        .setRetrieveIndexes(false)
+        .setRetrieveForeignKeys(false)
+        .setRetrievePrimaryKeys(false)
+        .setRetrieveRoutines(false)
+        .toOptions());
     final SchemaCrawlerOptions options = SchemaCrawlerOptionsBuilder.newSchemaCrawlerOptions()
       .withLoadOptions(loadOptionsBuilder.toOptions());
    
