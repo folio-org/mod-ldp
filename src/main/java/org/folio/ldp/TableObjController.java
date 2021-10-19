@@ -43,8 +43,10 @@ public class TableObjController {
     }
     List<TableObj> tables = (List<TableObj>) tableRepository.findAll();
     Map<String, Boolean> tableMap = new TreeMap<String, Boolean>(String.CASE_INSENSITIVE_ORDER);
-    for(TableObj table : tables) {
-      tableMap.put(table.tableName, true);
+    if(tables != null) {
+      for(TableObj table : tables) {
+        tableMap.put(table.tableName, true);
+      }
     }
     return tableMap;
   }

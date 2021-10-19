@@ -5,7 +5,10 @@ import schemacrawler.schemacrawler.SchemaCrawlerOptionsBuilder;
 import schemacrawler.schemacrawler.SchemaInfoLevelBuilder;
 import schemacrawler.schemacrawler.SchemaCrawlerOptions;
 import schemacrawler.schemacrawler.SchemaCrawlerException;
+import schemacrawler.schemacrawler.LimitOptionsBuilder;
 import schemacrawler.schemacrawler.LoadOptionsBuilder;
+import schemacrawler.inclusionrule.RegularExpressionInclusionRule;
+
 import schemacrawler.schema.Catalog;
 import schemacrawler.schema.Schema;
 import schemacrawler.schema.Table;
@@ -22,10 +25,20 @@ public class SchemaUtil {
   throws SchemaCrawlerException  {
     final Catalog catalog;
     final ArrayList<TableObj> tableObjList = new ArrayList<>();
+    LimitOptionsBuilder limitOptionsBuilder = LimitOptionsBuilder.builder();
+    
+    if(schemaNameList != null) {
+      for(String schemaName : schemaNameList ) {
+        limitOptionsBuilder = limitOptionsBuilder.includeSchemas(
+          new RegularExpressionInclusionRule(schemaName));
+      }
+    }
+    
     final LoadOptionsBuilder loadOptionsBuilder = LoadOptionsBuilder.builder()
       .withSchemaInfoLevel(SchemaInfoLevelBuilder.minimum());
     final SchemaCrawlerOptions options = SchemaCrawlerOptionsBuilder.newSchemaCrawlerOptions()
-      .withLoadOptions(loadOptionsBuilder.toOptions());
+      .withLoadOptions(loadOptionsBuilder.toOptions())
+      .withLimitOptions(limitOptionsBuilder.toOptions());
 
     catalog = SchemaCrawlerUtility.getCatalog(conn, options);
     for( final Schema schema : catalog.getSchemas()) {

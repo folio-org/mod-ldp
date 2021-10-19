@@ -55,6 +55,10 @@ public class QueryController {
     
     TableQuery query = queryObj.tables.get(0);
 
+    if(query == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: Parameter `tables` is required");
+    }
+
     ArrayList<String> schemaWhitelist = new ArrayList<String>(Arrays.asList("public", "local", "folio_reporting"));
     if(!schemaWhitelist.contains(query.schema)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: Parameter `schema` value '" + query.schema +
