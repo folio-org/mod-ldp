@@ -1,14 +1,14 @@
 package org.folio.ldp;
 
-import java.sql.Connection;
-
 import java.util.List;
 
-public class CrawlColumnObjRepository {
-  private Connection connection;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-  public void setConnection(Connection c) {
-    connection = c;
+public class CrawlColumnObjRepository {
+  private JdbcTemplate jdbc;
+
+  public void setJdbcTemplate(JdbcTemplate jdbc) {
+    this.jdbc = jdbc;
   }
 
   List<ColumnObj> findByTableName(String schema, String table) {
@@ -16,7 +16,7 @@ public class CrawlColumnObjRepository {
     List<ColumnObj> colList = null;
 
     try {
-      colList = SchemaUtil.getColumnsByTableName(connection, schema, table);
+      colList = SchemaUtil.getColumnsByTableName(jdbc, schema, table);
     } catch(Exception e) {
       System.out.println("Error getting columns: " + e.getLocalizedMessage());
     }

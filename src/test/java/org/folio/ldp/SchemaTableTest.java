@@ -5,7 +5,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
-
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import org.springframework.test.context.ContextConfiguration;
@@ -92,7 +92,7 @@ public class SchemaTableTest {
      dbMap.get("user"), dbMap.get("pass"));
     dmds.setDriverClassName("org.postgresql.Driver");
     CrawlTableObjRepository ctor = new CrawlTableObjRepository();
-    ctor.setConnection(dmds.getConnection());
+    ctor.setJdbcTemplate(new JdbcTemplate(dmds));
     List<TableObj> tableList = ctor.getAllTablesBySchema();
     for(TableObj t : tableList) {
       System.out.print(t.getTableName() + ", " + t.getTableSchema());

@@ -1,6 +1,9 @@
 package org.folio.ldp;
 
 import java.util.TreeMap;
+
+import javax.sql.DataSource;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -9,6 +12,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +29,7 @@ public class TableObjController {
   @GetMapping
   public List<TableObj> getTableObjs() {
     try {
-      tableRepository.setConnection(getConnection());
+      tableRepository.setJdbcTemplate(getJdbc());
     } catch(Exception e) {
       System.out.println("Error getting connection " + e.getLocalizedMessage());
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection information. Make sure the values are populated");
@@ -36,7 +40,7 @@ public class TableObjController {
   @Cacheable(cacheNames="tableMap")
   public Map<String, Boolean> getTablesAsMap() {
     try {
-      tableRepository.setConnection(getConnection());
+      tableRepository.setJdbcTemplate(getJdbc());
     } catch(Exception e) {
       System.out.println("Error getting connection " + e.getLocalizedMessage());
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection information. Make sure the values are populated");
@@ -51,7 +55,7 @@ public class TableObjController {
     return tableMap;
   }
 
-  private Connection getConnection() throws SQLException, ResponseStatusException {
+  private DataSource getDatasource() throws SQLException, ResponseStatusException { 
     String tenantId = TenantContext.getCurrentTenant();
     Map<String, String> dbMap = dbInfoService.getDBInfo(tenantId);
 
@@ -61,6 +65,10 @@ public class TableObjController {
     
     DriverManagerDataSource dmds = new DriverManagerDataSource(dbMap.get("url"), dbMap.get("user"), dbMap.get("pass"));
     dmds.setDriverClassName("org.postgresql.Driver");
-    return dmds.getConnection();
+    return dmds;
+  }
+
+  private JdbcTemplate getJdbc() throws SQLException, ResponseStatusException {
+    return new JdbcTemplate(getDatasource());
   }
 }
