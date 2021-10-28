@@ -4,11 +4,13 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CrawlTableObjRepository {
-  private Connection connection;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-  public void setConnection(Connection c) {
-    connection = c;
+public class CrawlTableObjRepository {
+  private JdbcTemplate jdbc;
+
+  public void setJdbcTemplate(JdbcTemplate jdbc) {
+    this.jdbc = jdbc;
   }
 
   public List<TableObj> getAllTablesBySchema() {
@@ -19,13 +21,14 @@ public class CrawlTableObjRepository {
     schemaList.add("public");
 
     try {
-      return SchemaUtil.getTablesBySchemaName(connection, schemaList);
+      return SchemaUtil.getTablesBySchemaName(jdbc, schemaList);
     } catch(Exception e) {
       System.out.println("Error getting tables: " + e.getLocalizedMessage());
       return null;
     }
   }
 
+  /*
   public List<TableObj> findAll() {
     try {
       return SchemaUtil.getTablesBySchemaName(connection, null);
@@ -33,6 +36,11 @@ public class CrawlTableObjRepository {
       System.out.println("Error getting tables: " + e.getLocalizedMessage());
       return null;
     }
+  }
+  */
+
+  public List<TableObj> findAll() {
+    return getAllTablesBySchema();
   }
 
   
