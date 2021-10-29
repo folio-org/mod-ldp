@@ -1,3 +1,8 @@
+## 1.0.1 2021-10-29
+* Fix bug with module descriptor not exposing configuration endpoint
+* Fix issue with table/schema lookup not returning full schema lists
+* Fix db lookup performance issues
+
 ## 1.0.0 2021-10-06
 * Add separation by-tenant for LDP DB backend connections (MODLDP-3, MODLDP-4, MODLDP-6)
 * Add health check endpoint (MODLDP-5)

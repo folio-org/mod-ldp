@@ -80,6 +80,19 @@ docker run -p 8001:8001 -e SPRING_DATASOURCE_PASSWORD=yourPasswordHere --rm mod-
 
 ## Additional information
 
+In order to talk to an external LDP database, mod-ldp needs to have db connection information configured on a per-tenant basis. This is accomplished by creating an entry at the config endpoint with a key of 'dbinfo'.
+
+The relevant fields of the configuration are 'user', 'pass' and 'url'.
+
+An example would be to PUT the following payload to /ldp/config/dbinfo:
+```
+{
+  "key":"dbinfo",
+  "tenant":"diku",
+  "value":"{ \"user\" : \"ldp_user\", \"url\" : \"jdbc:postgresql:\/\/somehost.net:5432\/db_name\", \"pass\" : \"abc123def456\" }"  
+}
+```
+
 ### Other documentation
 
 [Library Data Platform](https://github.com/library-data-platform/ldp) (LDP)
