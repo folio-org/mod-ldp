@@ -28,13 +28,15 @@ public class TableObjController {
 
   @GetMapping
   public List<TableObj> getTableObjs() {
+    List<TableObj> tableList;
     try {
       tableRepository.setJdbcTemplate(getJdbc());
+      tableList = (List<TableObj>) tableRepository.getAllTablesBySchema();
     } catch(Exception e) {
       System.out.println("Error getting connection " + e.getLocalizedMessage());
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection information. Make sure the values are populated");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection information. Make sure the values are populated correctly");
     }
-    return (List<TableObj>) tableRepository.getAllTablesBySchema();
+    return tableList; 
   }
 
   @Cacheable(cacheNames="tableMap")
@@ -45,7 +47,14 @@ public class TableObjController {
       System.out.println("Error getting connection " + e.getLocalizedMessage());
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection information. Make sure the values are populated");
     }
-    List<TableObj> tables = (List<TableObj>) tableRepository.findAll();
+    
+    List<TableObj> tables;
+    try {
+      tables = (List<TableObj>) tableRepository.findAll();
+    } catch(Exception e) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error getting tables: " + e.getLocalizedMessage());
+    }
+
     Map<String, Boolean> tableMap = new TreeMap<String, Boolean>(String.CASE_INSENSITIVE_ORDER);
     if(tables != null) {
       for(TableObj table : tables) {

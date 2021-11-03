@@ -92,29 +92,34 @@ public class QueryController {
 
     String queryContent = queryService.generateQuery(query);
 
-    List<Map<String, Object>> content = jdbc.query(queryContent, new ResultSetExtractor<List<Map<String, Object>>>() {
-      public List<Map<String, Object>> extractData(ResultSet rs) throws SQLException {
+    List<Map<String, Object>> content;
+    try {
+      content = jdbc.query(queryContent, new ResultSetExtractor<List<Map<String, Object>>>() {
+        public List<Map<String, Object>> extractData(ResultSet rs) throws SQLException {
 
-          List<Map<String, Object>> rows = new ArrayList<>();
-          ResultSetMetaData rsmd = rs.getMetaData();
-          int columnCount = rsmd.getColumnCount();
+            List<Map<String, Object>> rows = new ArrayList<>();
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int columnCount = rsmd.getColumnCount();
 
-          while (rs.next()) {
-            LinkedHashMap<String, Object> row = new LinkedHashMap<>();
-            for (int i = 1; i <= columnCount; i++) {
-              // Note that the index is 1-based
-              String colName = rsmd.getColumnName(i);
+            while (rs.next()) {
+              LinkedHashMap<String, Object> row = new LinkedHashMap<>();
+              for (int i = 1; i <= columnCount; i++) {
+                // Note that the index is 1-based
+                String colName = rsmd.getColumnName(i);
 
-              if(colName.equals("data")) { continue; }
+                if(colName.equals("data")) { continue; }
 
-              Object colVal = rs.getObject(i);
-              row.put(colName, colVal);
+                Object colVal = rs.getObject(i);
+                row.put(colName, colVal);
+              }
+              rows.add(row);
             }
-            rows.add(row);
+            return rows;
           }
-          return rows;
-        }
-    });
+      });
+    } catch(Exception e) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error making query: " + e.getLocalizedMessage());
+    }
     return content;
   }
 }

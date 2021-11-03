@@ -414,5 +414,28 @@ public class QueryControllerTest {
 
   }
 
+  @Test
+  public void queryBadDBInfo() throws Exception{
+
+    ConfigObj config = new ConfigObj();
+    JSONObject dbJson = new JSONObject();
+    dbJson.put("url", externalPostgreSQLContainer.getJdbcUrl());
+    dbJson.put("user", "evilcow");
+    dbJson.put("pass", externalPostgreSQLContainer.getPassword());
+    config.setTenant("diku");
+    config.setKey("dbinfo");
+    config.setValue(dbJson);
+    configObjRepo.save(config);
+    
+    String jsonString = 
+    "{\"tables\":[{\"schema\":\"public\",\"tableName\":\"user_users\",\"columnFilters\":[{}],\"showColumns\":[],\"orderBy\":[],\"limit\":101}]}";
+    mvc.perform(post(QUERY_PATH)
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku") 
+      .content(jsonString))
+        .andExpect(status().is(500));
+
+  }
+
 
 }

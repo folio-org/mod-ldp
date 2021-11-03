@@ -48,6 +48,10 @@ public class ConfigObjController {
   @PutMapping(value="/{key}")
   public Map<String, Object> updateByKey(@PathVariable String key, @RequestBody ConfigObjDTO entity) {
     String tenantId = TenantContext.getCurrentTenant();
+    if(entity.getKey() != null && !entity.getKey().equals(key)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Key in request body must match path");
+    }
+    entity.setKey(key);
     System.out.println("Got update request with tenant " + tenantId + " and key " + key + " and value " + entity.getValue().toString());
     System.out.println("updateByKey called with key " + key + " and tenant " + tenantId);
     ConfigObjId configObjId = new ConfigObjId();

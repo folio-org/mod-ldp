@@ -31,6 +31,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,6 +116,47 @@ public class ConfigObjControllerTest {
       .content(json.toString()))
         .andExpect(status().isOk());
 
+  }
+
+  @Test
+  public void putInvalidKey() throws Exception {
+    JSONObject valueJson = new JSONObject();
+    valueJson.put("name","doofensmirch");
+    valueJson.put("role","villain");
+    JSONObject json = new JSONObject();
+    json.put("key", "npc");
+    json.put("value", valueJson.toString());
+
+    mvc.perform(put(QUERY_PATH + "/" + "stupid")
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
+      .content(json.toString()))
+        .andExpect(status().is(400));
+  }
+
+  @Test
+  public void putBadJson() throws Exception {
+    mvc.perform(put(QUERY_PATH + "/" + "stupid")
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
+      .content("{\"key\":\"stupid\", \"value\": \"something"))
+        .andExpect(status().is(400));
+  }
+
+  @Test
+  public void putBadJsonKey() throws Exception {
+    JSONObject valueJson = new JSONObject();
+    valueJson.put("name","doofensmirch");
+    valueJson.put("role","villain");
+    JSONObject json = new JSONObject();
+    json.put("key", "npc");
+    json.put("value", "{\"dog\":\"woof");
+
+    mvc.perform(put(QUERY_PATH + "/" + "npc")
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
+      .content(json.toString()))
+        .andExpect(status().is(400));
   }
 
   @Test
