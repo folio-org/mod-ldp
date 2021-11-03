@@ -109,6 +109,26 @@ public class SchemaTableTest {
   }
 
   @Test
+  public void getMVCTablesBadDBInfo() throws Exception {
+
+    ConfigObj config = new ConfigObj();
+    JSONObject dbJson = new JSONObject();
+    dbJson.put("url", externalPostgreSQLContainer.getJdbcUrl());
+    dbJson.put("user", "chickenonaraft");
+    dbJson.put("pass", externalPostgreSQLContainer.getPassword());
+    config.setTenant("diku");
+    config.setKey("dbinfo");
+    config.setValue(dbJson);
+    
+    configObjRepo.save(config);
+
+    mvc.perform(get(QUERY_PATH)
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku"))
+        .andExpect(status().is(500));
+  }
+
+  @Test
   public void getMVCTablesBadTenant() throws Exception {
     mvc.perform(get(QUERY_PATH)
       .contentType("application/json")

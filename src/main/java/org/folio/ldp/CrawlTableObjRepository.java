@@ -24,20 +24,9 @@ public class CrawlTableObjRepository {
       return SchemaUtil.getTablesBySchemaName(jdbc, schemaList);
     } catch(Exception e) {
       System.out.println("Error getting tables: " + e.getLocalizedMessage());
-      return null;
+      throw e;
     }
   }
-
-  /*
-  public List<TableObj> findAll() {
-    try {
-      return SchemaUtil.getTablesBySchemaName(connection, null);
-    } catch(Exception e) {
-      System.out.println("Error getting tables: " + e.getLocalizedMessage());
-      return null;
-    }
-  }
-  */
 
   public List<TableObj> findAll() {
     return getAllTablesBySchema();
