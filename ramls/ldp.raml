@@ -11,6 +11,38 @@ documentation:
     content: !include overview.md
 
 /ldp:
+  /config:
+    description: "Configuration items"
+    get:
+      description: "Return a list of configuration items"
+      responses:
+        200:
+          body:
+            application/json:
+              type: !include configuration-list.json
+              example: !include examples/configuration-list.json
+    /{key}:
+      get:
+        description: "Retrieve a single configuration by key"
+        responses:
+          200:
+            body:
+              application/json:
+                type: !include configuration.json
+                example: !include examples/configuration.json
+      put:
+        description: "Modify or add a configuration by key"
+        body:
+          application/json:
+            type: !include configuration.json
+            example: !include examples/configuration.json
+        responses:
+          200:
+            body:
+              application/json:
+                type: !include configuration.json
+                example: !include examples/configuration.json
+
   /db:
     /tables:
       description: "Tables in their respective schemas"

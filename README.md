@@ -18,6 +18,11 @@ The WSAPI is described in machine-readable form by [a RAML file](ramls/ldp.raml)
 
 See [`application.yml`](src/main/resources/application.yml) for configuration.
 
+### Code of Conduct
+
+Refer to the Wiki [FOLIO Code of Conduct](https://wiki.folio.org/display/COMMUNITY/FOLIO+Code+of+Conduct).
+
+
 ## Clone, build, run
 
 ```
