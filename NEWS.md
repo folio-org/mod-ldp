@@ -1,3 +1,7 @@
+## 1.0.2 2022-03-03
+* Add personal data disclosure
+* Update RAML definitions
+
 ## 1.0.1 2021-10-29
 * Fix bug with module descriptor not exposing configuration endpoint
 * Fix issue with table/schema lookup not returning full schema lists
