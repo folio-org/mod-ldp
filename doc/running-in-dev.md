@@ -72,7 +72,27 @@ curl -H 'X-Okapi-Tenant: diku' localhost:12370/ldp/db/tables
 
 ## Plumbing
 
-There are 3 properties in use at least. port, http.port, server.port , If you lucky the README or DeploymentDescriptor-template.json will tell. The Dockerfile most often assumes a default listening port.
+In the invocation above, we told mod-ldp to listen on port 12370, using `--server.port=12370`. (Other FOLIO modules use 
+`-Dport=1234`,
+`-Dhttp.port=1234`
+or
+`-Dserver.port=1234` -- there is no standard.)
 
-XXX -Dhttp.port=1234
+Now we need to make this available to the Okapi of a running FOLIO system. The simplest way is to run a `folio/testing-backend` Vagrant box, and make a reverse tunnel into that box so Okapi can see the port:
+```
+$ vagrant ssh -- -R 12370:localhost:12370
+guest$ # Leave the ssh session open
+```
+
+Now all you need to do is tell Okapi about the locally running module. In another shell: POST the module descriptor, POST a discovery descriptor that tells Okapi where to find the already-running module, and enable the module for a tenant:
+```
+curl -w '\n' http://localhost:9130/_/proxy/modules -d @target/ModuleDescriptor.json
+curl -w '\n' http://localhost:9130/_/discovery/modules -d '{ "srvcId": "mod-ldp-1.0.3-SNAPSHOT", "instId": "127.0.0.1-12370", "url" : "http://127.0.0.1:12370" }'
+curl -w '\n' http://localhost:9130/_/proxy/tenants/diku/modules -d '{ "id": "mod-ldp-1.0.3-SNAPSHOT" }'
+```
+
+(`srvcId` in the second command, and `id` in the third, must both match the `id` specified in the module descriptor; `url` in the second command must point to the running instance that you have provided a tunnel for; `instId` can be anything unique.)
+
+Now you can run Stripes against the VM's Okapi on http://localhost:9130 and the side-loaded mod-ldp will be available, as you can verify by going to the **Software versions** at (for example) http://localhost:3000/settings/about and searching within the page for `mod-harvester-admin`.
+
 
