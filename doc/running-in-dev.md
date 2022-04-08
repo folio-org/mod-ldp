@@ -46,8 +46,6 @@ Once you have found the current hostname, you can start mod-ldp as follows:
 env DB_HOST=ec2-34-224-78-21.compute-1.amazonaws.com DB_PORT=5432 DB_DATABASE=ldp DB_USERNAME=ldp DB_PASSWORD=diku_ldp9367 java -jar target/mod-ldp-1.0.3-SNAPSHOT.jar --server.port=12370
 ```
 
-(The top-level README says to use `DB_NAME`, `DB_USER` and `DB_PASS`. XXX Fix the README.)
-
 You can test that it's running correctly with something like:
 ```
 curl -H 'X-Okapi-Tenant: diku' localhost:12370//ldp/config/dbinfo
