@@ -1,5 +1,14 @@
 # Building and running `mod-ldp` for development
 
+<!-- md2toc -l 2 running-in-dev.md -->
+* [Building the module](#building-the-module)
+* [Finding the LDP datasbase](#finding-the-ldp-datasbase)
+* [Testing the connection to the LDP database](#testing-the-connection-to-the-ldp-database)
+* [Running the module](#running-the-module)
+* [Initializing the module](#initializing-the-module)
+* [Plumbing](#plumbing)
+* [Daily update procedure](#daily-update-procedure)
+
 
 ## Building the module
 
@@ -92,5 +101,13 @@ curl -w '\n' http://localhost:9130/_/proxy/tenants/diku/modules -d '{ "id": "mod
 (`srvcId` in the second command, and `id` in the third, must both match the `id` specified in the module descriptor; `url` in the second command must point to the running instance that you have provided a tunnel for; `instId` can be anything unique.)
 
 Now you can run Stripes against the VM's Okapi on http://localhost:9130 and the side-loaded mod-ldp will be available, as you can verify by going to the **Software versions** at (for example) http://localhost:3000/settings/about and searching within the page for `mod-harvester-admin`.
+
+
+## Daily update procedure
+
+Because the folio-snapshot backend that provides the LDP database gets rebuilt every day, and gets allocated a different hostname each time, it's necessary to go through a tedious update process at the beginning of each day's development:
+
+* Restart mod-ldp, as described [above](#running-the-module), using the new hostname as the value of the `DB_HOST` environment variable.
+* Go to http://localhost:3000/settings/ldp/dbconfig and set **Database URL** to the new value in the format `jdbc:postgresql://ec2-3-85-12-188.compute-1.amazonaws.com/ldp`
 
 
