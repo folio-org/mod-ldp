@@ -108,6 +108,6 @@ Now you can run Stripes against the VM's Okapi on http://localhost:9130 and the 
 Because the folio-snapshot backend that provides the LDP database gets rebuilt every day, and gets allocated a different hostname each time, it's necessary to go through a tedious update process at the beginning of each day's development:
 
 * Restart mod-ldp, as described [above](#running-the-module), using the new hostname as the value of the `DB_HOST` environment variable.
-* Go to http://localhost:3000/settings/ldp/dbconfig and set **Database URL** to the new value in the format `jdbc:postgresql://ec2-3-85-12-188.compute-1.amazonaws.com/ldp`
+* Go to http://localhost:3000/settings/ldp/dbconfig and set **Database URL** to the new value in the format `jdbc:postgresql://ec2-3-85-12-188.compute-1.amazonaws.com/ldp` and reset **Username** and **Password** to their correct values.
 
 
