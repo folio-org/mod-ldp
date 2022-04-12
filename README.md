@@ -31,7 +31,7 @@ $ java -jar target/mod-ldp-0.0.1-SNAPSHOT.jar
 
 The port can be changed by passing a command-line option `--server.port=8090`
 
-The default configuration for database connection can be changed in the [`application.yml`](src/main/resources/application.yml) file. It currently looks for run-time provided environmental variables of DB_HOST, DB_PORT, DB_NAME, DB_USER and DB_PASS.
+The default configuration for database connection can be changed in the [`application.yml`](src/main/resources/application.yml) file. It currently looks for run-time provided environmental variables of DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME and DB_PASSWORD.
 
 If running `mod-ldp` locally, you will likely run into CORS problems with Stripes refusing to make GET and POST requests to it because OPTIONS requests don't return the necessary `Access-control-allow-origin` header. To work around this, you can run a CORS-permissive HTTP proxy such as [`local-cors-anywhere`](https://github.com/dkaoster/local-cors-anywhere) -- which by default listens on port 8080 -- and access the running `mod-ldp` at http://localhost:8080/http://localhost:8001.
 
