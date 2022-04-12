@@ -1,3 +1,6 @@
+## 1.0.3 (IN PROGRESS)
+* Support "op" in the `columnFilters` entries for inequality searching. Fixes MODLDP-28.
+
 ## 1.0.2 2022-03-03
 * Add personal data disclosure
 * Update RAML definitions

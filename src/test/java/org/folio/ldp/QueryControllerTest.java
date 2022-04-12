@@ -334,8 +334,8 @@ public class QueryControllerTest {
     List<ColumnFilter> columnFilters = new ArrayList<>();
     List<String> showColumns = new ArrayList<>();
     List<OrderingCriterion> orderBy = new ArrayList<>();
-    columnFilters.add(new ColumnFilter("_version", "2"));
-    columnFilters.add(new ColumnFilter("source", "MARC"));
+    columnFilters.add(new ColumnFilter("_version", "=", "2"));
+    columnFilters.add(new ColumnFilter("source", "=", "MARC"));
     showColumns.add("_version");
     showColumns.add("hrid");
     showColumns.add("index_title");

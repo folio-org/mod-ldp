@@ -17,6 +17,23 @@ public class QueryServiceImpl implements QueryService {
     return "\"" + s + "\"";
   }
 
+  private BinaryCondition makeCond(ColumnFilter filter) {
+    CustomSql key = new CustomSql(quote(filter.key));
+    if (filter.op == null) return BinaryCondition.equalTo(key, filter.value);
+
+    switch (filter.op) {
+    case "=":     return BinaryCondition.equalTo(key, filter.value);
+    case "<>":    return BinaryCondition.notEqualTo(key, filter.value);
+    case "<":     return BinaryCondition.lessThan(key, filter.value);
+    case "<=":    return BinaryCondition.lessThanOrEq(key, filter.value);
+    case ">":     return BinaryCondition.greaterThan(key, filter.value);
+    case ">=":    return BinaryCondition.greaterThanOrEq(key, filter.value);
+    case "LIKE":  return BinaryCondition.like(key, filter.value);
+    case "ILIKE": return BinaryCondition.like(key, filter.value); // XXX should be ILIKE
+    default:      return BinaryCondition.equalTo(key, filter.value);
+    }
+  }
+
   @Override
   public String generateQuery(TableQuery query) {
 
@@ -36,8 +53,8 @@ public class QueryServiceImpl implements QueryService {
         if(col == null || col.key == null || col.key.equals("") || col.value == null || col.value.equals("") ) {
           continue; 
         }
-        selectQuery = selectQuery.addCondition(
-          BinaryCondition.equalTo(new CustomSql(quote(col.key)), col.value));
+        BinaryCondition cond = makeCond(col);
+        selectQuery = selectQuery.addCondition(cond);
       }
     }
 

@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 class ColumnFilter {
   public String key;
+  public String op;
   public String value;
 }
 
