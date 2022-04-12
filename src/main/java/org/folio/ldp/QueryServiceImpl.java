@@ -53,8 +53,7 @@ public class QueryServiceImpl implements QueryService {
         if(col == null || col.key == null || col.key.equals("") || col.value == null || col.value.equals("") ) {
           continue; 
         }
-        BinaryCondition cond = makeCond(col);
-        selectQuery = selectQuery.addCondition(cond);
+        selectQuery = selectQuery.addCondition(makeCond(col));
       }
     }
 
