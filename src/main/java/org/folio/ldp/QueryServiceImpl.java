@@ -29,7 +29,7 @@ public class QueryServiceImpl implements QueryService {
     case ">":     return BinaryCondition.greaterThan(key, filter.value);
     case ">=":    return BinaryCondition.greaterThanOrEq(key, filter.value);
     case "LIKE":  return BinaryCondition.like(key, filter.value);
-    case "ILIKE": return BinaryCondition.like(key, filter.value); // XXX should be ILIKE
+    case "ILIKE": return new BinaryCondition(" ILIKE ", key, filter.value);
     default:      return BinaryCondition.equalTo(key, filter.value);
     }
   }
