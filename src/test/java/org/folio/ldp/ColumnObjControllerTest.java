@@ -29,7 +29,7 @@ import java.util.Map;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

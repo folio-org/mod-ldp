@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.ClassRule;
@@ -104,7 +104,7 @@ public class ConfigObjControllerTest {
     mvc.perform(put(QUERY_PATH + "/" + "dbconf")
       .contentType("application/json")
       .header("X-Okapi-Tenant", "diku")
-      .content(json.toString()))
+      .content(json.toJSONString()))
         .andExpect(status().isOk());
 
     //Do it again
@@ -176,8 +176,8 @@ public class ConfigObjControllerTest {
 
     ConfigObj newConfig = repo.findById(configId).get();
     assertNotNull(newConfig);
-    assertTrue(newConfig.getValue().getString("bar").equals("tomato"));
-    assertTrue(newConfig.getValue().getString("foo").equals("pickle"));
+    assertTrue(newConfig.getValue().get("bar").equals("tomato"));
+    assertTrue(newConfig.getValue().get("foo").equals("pickle"));
 
   }
 
@@ -190,7 +190,7 @@ public class ConfigObjControllerTest {
     dbconf.put("pass", postgreSQLContainer.getPassword());
     JSONObject json = new JSONObject();
     json.put("key", "dbconf");
-    json.put("value", dbconf.toString());
+    json.put("value", dbconf);
 
     mvc.perform(put(QUERY_PATH + "/" + "dbconf")
       .contentType("application/json")
@@ -204,8 +204,8 @@ public class ConfigObjControllerTest {
 
     ConfigObj newConfig = repo.findById(configId).get();
     assertNotNull(newConfig);
-    assertTrue(newConfig.getValue().getString("url").equals(postgreSQLContainer.getJdbcUrl()));
-    assertTrue(newConfig.getValue().getString("user").equals(postgreSQLContainer.getUsername()));
+    assertTrue(newConfig.getValue().get("url").equals(postgreSQLContainer.getJdbcUrl()));
+    assertTrue(newConfig.getValue().get("user").equals(postgreSQLContainer.getUsername()));
   }
 
   

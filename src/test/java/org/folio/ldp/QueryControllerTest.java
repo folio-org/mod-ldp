@@ -21,7 +21,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.ClassRule;
 
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 import org.junit.runner.RunWith;
 import static org.hamcrest.Matchers.*;

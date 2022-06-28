@@ -8,11 +8,12 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 import org.folio.ldp.JSONObjectConverter;
-import org.json.JSONObject;
 import org.springframework.lang.NonNull;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import org.json.simple.JSONObject;
 
 @Entity
 @IdClass(ConfigObjId.class)

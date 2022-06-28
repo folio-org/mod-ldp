@@ -28,9 +28,9 @@ public class DBInfoServiceImpl  implements DBInfoService {
       ConfigObj config = result.get();
       HashMap<String, String> dbMap = new HashMap<>();
       try {
-        dbMap.put("url", config.getValue().getString("url"));
-        dbMap.put("user", config.getValue().getString("user"));
-        dbMap.put("pass", config.getValue().getString("pass"));
+        dbMap.put("url", (String)(config.getValue().get("url")));
+        dbMap.put("user", (String)(config.getValue().get("user")));
+        dbMap.put("pass", (String)(config.getValue().get("pass")));
         return dbMap;
       } catch(Exception e) {
         System.out.println("Unable to get dbinfo for tenant " + tenantId + ": " + e.getLocalizedMessage());
