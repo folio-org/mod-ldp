@@ -5,6 +5,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -20,6 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
 import org.junit.After;
 import org.junit.Test;
 import org.junit.ClassRule;
@@ -70,6 +73,38 @@ public class ConfigObjControllerTest {
 
   @Test
   public void setAndRetrieveMVC() throws Exception {
+    JSONObject jsonobj = new JSONObject();
+    jsonobj.put("species", "dog");
+    jsonobj.put("age", 4);
+    jsonobj.put("name", "Sparky");
+    JSONObject json = new JSONObject();
+    json.put("key", "animal");
+    json.put("value", jsonobj);
+
+    mvc.perform(put(QUERY_PATH + "/" + "animal")
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
+      .content(json.toString()))
+        .andExpect(status().isOk());
+        
+
+    MvcResult mvcResult = mvc.perform(get(QUERY_PATH + "/" + "animal")
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.key", is("animal")))
+        .andReturn();
+    
+    String content = mvcResult.getResponse().getContentAsString();
+    //System.out.println("Got content from request: " + content);
+    JSONObject resultJson = (JSONObject) JSONValue.parse(content);
+    JSONObject valueJson = (JSONObject) JSONValue.parse((String)resultJson.get("value"));
+    assertEquals("dog", (String)valueJson.get("species"));
+
+  }
+
+  @Test
+  public void setAndRetrieveMVCDBConf() throws Exception {
     JSONObject dbconf = new JSONObject();
     dbconf.put("url", postgreSQLContainer.getJdbcUrl());
     dbconf.put("user", postgreSQLContainer.getUsername());
@@ -84,10 +119,17 @@ public class ConfigObjControllerTest {
       .content(json.toString()))
         .andExpect(status().isOk());
 
-    mvc.perform(get(QUERY_PATH + "/" + "dbconf")
+    MvcResult mvcResult = mvc.perform(get(QUERY_PATH + "/" + "dbconf")
       .contentType("application/json")
       .header("X-Okapi-Tenant", "diku"))
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andReturn();
+    
+    String content = mvcResult.getResponse().getContentAsString();
+    System.out.println("Got content from request: " + content);
+    JSONObject resultJson = (JSONObject) JSONValue.parse(content);
+    JSONObject valueJson = (JSONObject) JSONValue.parse((String)resultJson.get("value"));
+    assertEquals("", (String)valueJson.get("pass"));
 
   }
 
