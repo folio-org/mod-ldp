@@ -332,18 +332,18 @@ public class ConfigObjControllerTest {
 
   }
 
-  @Ignore
+  //@Ignore
   @Test
   public void testPutWithBadJsonFormat() throws Exception {
    
     String key = "wtf";
     JSONObject putJson = new JSONObject();
-    JSONObject newDbinfo = new JSONObject();
-    newDbinfo.put("url", postgreSQLContainer.getJdbcUrl());
-    newDbinfo.put("user", postgreSQLContainer.getUsername());
-    newDbinfo.put("pass", "");
+    JSONObject randoJson = new JSONObject();
+    randoJson.put("what", "I dunno");
+    randoJson.put("the", "You dunno");
+    randoJson.put("frick", "We dunno");
     putJson.put("KEY", key);
-    putJson.put("VALUE", newDbinfo);
+    putJson.put("VALUE", randoJson);
 
     mvc.perform(put(QUERY_PATH + "/" + key)
       .contentType("application/json")

@@ -54,7 +54,7 @@ public class ConfigObjController {
     if(entity == null) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Improperly formatted input");
     }
-    if(entity.getKey() != null && !entity.getKey().equals(key)) {
+    if(entity.getKey() == null || !entity.getKey().equals(key)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Key in request body must match path");
     }
     entity.setKey(key);
@@ -68,9 +68,17 @@ public class ConfigObjController {
     if(result.isPresent()) {
       ConfigObj oldEntity = result.get();
       //Don't allow an empty token or empty password in dbinfo or sqconfig respectively to overwrite an existing value
-      if(key.equals("dbinfo") || key.equals("sqconfig")) {
+      if(key != null && (key.equals("dbinfo") || key.equals("sqconfig"))) {
         JSONObject valueJson = entity.getValue();
         JSONObject oldValueJson = oldEntity.getValue();
+
+        if(valueJson == null){
+          valueJson = new JSONObject();
+        }
+
+        if(oldValueJson == null) {
+          oldValueJson = new JSONObject();
+        }
         
         String secretKey = "";
         if(key.equals("dbinfo")) { secretKey = "pass"; }
