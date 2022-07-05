@@ -1,3 +1,6 @@
+## 1.0.4 2022-07-05
+* Add support for both escaped and inline JSON in config objects
+
 ## 1.0.3 2022-07-05
 * Support "op" in the `columnFilters` entries for inequality searching. Fixes MODLDP-28.
 * Change JSON library to JSON-Simple to avoid licensing issues (MODLDP-33)
