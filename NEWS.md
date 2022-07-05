@@ -1,5 +1,7 @@
-## 1.0.3 (IN PROGRESS)
+## 1.0.3 2022-07-05
 * Support "op" in the `columnFilters` entries for inequality searching. Fixes MODLDP-28.
+* Change JSON library to JSON-Simple to avoid licensing issues (MODLDP-33)
+* Don't transmit passwords or tokens for dbinfo or sqconfig keys in config (MODLDP-25)
 
 ## 1.0.2 2022-03-03
 * Add personal data disclosure
