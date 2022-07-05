@@ -72,14 +72,6 @@ public class ConfigObjController {
         JSONObject valueJson = entity.getValue();
         JSONObject oldValueJson = oldEntity.getValue();
 
-        if(valueJson == null){
-          valueJson = new JSONObject();
-        }
-
-        if(oldValueJson == null) {
-          oldValueJson = new JSONObject();
-        }
-        
         String secretKey = "";
         if(key.equals("dbinfo")) { secretKey = "pass"; }
         if(key.equals("sqconfig")) { secretKey = "token"; }
