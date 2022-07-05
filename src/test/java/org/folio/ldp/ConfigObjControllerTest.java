@@ -26,7 +26,7 @@ import org.json.simple.JSONValue;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.ClassRule;
-
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
@@ -104,22 +104,22 @@ public class ConfigObjControllerTest {
   }
 
   @Test
-  public void setAndRetrieveMVCDBConf() throws Exception {
-    JSONObject dbconf = new JSONObject();
-    dbconf.put("url", postgreSQLContainer.getJdbcUrl());
-    dbconf.put("user", postgreSQLContainer.getUsername());
-    dbconf.put("pass", postgreSQLContainer.getPassword());
+  public void setAndRetrieveMVCDBInfo() throws Exception {
+    JSONObject dbinfo = new JSONObject();
+    dbinfo.put("url", postgreSQLContainer.getJdbcUrl());
+    dbinfo.put("user", postgreSQLContainer.getUsername());
+    dbinfo.put("pass", postgreSQLContainer.getPassword());
     JSONObject json = new JSONObject();
-    json.put("key", "dbconf");
-    json.put("value", dbconf);
+    json.put("key", "dbinfo");
+    json.put("value", dbinfo);
 
-    mvc.perform(put(QUERY_PATH + "/" + "dbconf")
+    mvc.perform(put(QUERY_PATH + "/" + "dbinfo")
       .contentType("application/json")
       .header("X-Okapi-Tenant", "diku")
       .content(json.toString()))
         .andExpect(status().isOk());
 
-    MvcResult mvcResult = mvc.perform(get(QUERY_PATH + "/" + "dbconf")
+    MvcResult mvcResult = mvc.perform(get(QUERY_PATH + "/" + "dbinfo")
       .contentType("application/json")
       .header("X-Okapi-Tenant", "diku"))
         .andExpect(status().isOk())
@@ -130,6 +130,13 @@ public class ConfigObjControllerTest {
     JSONObject resultJson = (JSONObject) JSONValue.parse(content);
     JSONObject valueJson = (JSONObject) JSONValue.parse((String)resultJson.get("value"));
     assertEquals("", (String)valueJson.get("pass"));
+
+    //Make sure we've got the right value in the repo
+    ConfigObjId configObjId = new ConfigObjId();
+    configObjId.setTenant("diku");
+    configObjId.setKey("dbinfo");
+    ConfigObj dbinfoConfig = repo.findById(configObjId).get();
+    assertEquals(dbinfoConfig.getValue().get("pass"), postgreSQLContainer.getPassword());
 
   }
 
@@ -248,6 +255,102 @@ public class ConfigObjControllerTest {
     assertNotNull(newConfig);
     assertTrue(newConfig.getValue().get("url").equals(postgreSQLContainer.getJdbcUrl()));
     assertTrue(newConfig.getValue().get("user").equals(postgreSQLContainer.getUsername()));
+  }
+
+  @Test
+  public void testOverwriteDbinfoWithEmptyPass() throws Exception {
+    ConfigObj configObj = new ConfigObj();
+    JSONObject json = new JSONObject();
+    String key = "dbinfo";
+    
+    json.put("url", postgreSQLContainer.getJdbcUrl());
+    json.put("user", postgreSQLContainer.getUsername());
+    json.put("pass", postgreSQLContainer.getPassword());
+    configObj.setTenant("diku");
+    configObj.setKey(key);
+    configObj.setValue(json);
+    repo.save(configObj);
+    
+    JSONObject putJson = new JSONObject();
+    JSONObject newDbinfo = new JSONObject();
+    newDbinfo.put("url", postgreSQLContainer.getJdbcUrl());
+    newDbinfo.put("user", postgreSQLContainer.getUsername());
+    newDbinfo.put("pass", "");
+    putJson.put("key", key);
+    putJson.put("value", newDbinfo);
+
+    mvc.perform(put(QUERY_PATH + "/" + key)
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
+      .content(putJson.toJSONString()))
+        .andExpect(status().isOk());
+    
+    ConfigObjId configObjId = new ConfigObjId();
+    configObjId.setTenant("diku");
+    configObjId.setKey(key);
+    ConfigObj dbinfoConfig = repo.findById(configObjId).get();
+    assertEquals(dbinfoConfig.getValue().get("pass"), postgreSQLContainer.getPassword());
+
+
+  }
+
+  @Test
+  public void testOverwriteDbinfoWithPass() throws Exception {
+    ConfigObj configObj = new ConfigObj();
+    JSONObject json = new JSONObject();
+    String key = "dbinfo";
+    
+    json.put("url", postgreSQLContainer.getJdbcUrl());
+    json.put("user", postgreSQLContainer.getUsername());
+    json.put("pass", postgreSQLContainer.getPassword());
+    configObj.setTenant("diku");
+    configObj.setKey(key);
+    configObj.setValue(json);
+    repo.save(configObj);
+    
+    JSONObject putJson = new JSONObject();
+    JSONObject newDbinfo = new JSONObject();
+    String newPass = "royale_with_cheese";
+    newDbinfo.put("url", postgreSQLContainer.getJdbcUrl());
+    newDbinfo.put("user", postgreSQLContainer.getUsername());
+    newDbinfo.put("pass", newPass);
+    putJson.put("key", key);
+    putJson.put("value", newDbinfo);
+
+    mvc.perform(put(QUERY_PATH + "/" + key)
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
+      .content(putJson.toJSONString()))
+        .andExpect(status().isOk());
+    
+    ConfigObjId configObjId = new ConfigObjId();
+    configObjId.setTenant("diku");
+    configObjId.setKey(key);
+    ConfigObj dbinfoConfig = repo.findById(configObjId).get();
+    assertEquals(dbinfoConfig.getValue().get("pass"), newPass);
+
+
+  }
+
+  @Ignore
+  @Test
+  public void testPutWithBadJsonFormat() throws Exception {
+   
+    String key = "wtf";
+    JSONObject putJson = new JSONObject();
+    JSONObject newDbinfo = new JSONObject();
+    newDbinfo.put("url", postgreSQLContainer.getJdbcUrl());
+    newDbinfo.put("user", postgreSQLContainer.getUsername());
+    newDbinfo.put("pass", "");
+    putJson.put("KEY", key);
+    putJson.put("VALUE", newDbinfo);
+
+    mvc.perform(put(QUERY_PATH + "/" + key)
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
+      .content(putJson.toJSONString()))
+        .andExpect(status().isBadRequest());
+
   }
 
   

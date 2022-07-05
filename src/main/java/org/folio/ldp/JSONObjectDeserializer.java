@@ -16,7 +16,12 @@ public class JSONObjectDeserializer extends JsonDeserializer<JSONObject> {
   @Override
   public JSONObject deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
     JSONObject json;
-    String input = p.readValueAsTree().toString();
+    String input = null;
+    try {
+      input = p.readValueAsTree().toString();
+    } catch(Exception e) {
+      throw new IOException(e);
+    }
     System.out.println("Attempting to deserialize JSON: " + input);
     try {
       Object obj = JSONValue.parseWithException(input);

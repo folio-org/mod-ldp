@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.Map;
 import java.util.HashMap;
 
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +40,9 @@ public class ConfigObjController {
     configObjId.setKey(key);
     Optional<ConfigObj> result = repo.findById(configObjId);
     if(result.isPresent()) {
-      return configObjToMap(result.get());
+      Map<String, Object> returnMap = configObjToMap(result.get());
+      sanitizeMap(returnMap);
+      return returnMap;
     } else {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such key " + key);
     }
@@ -47,6 +51,9 @@ public class ConfigObjController {
   @PutMapping(value="/{key}")
   public Map<String, Object> updateByKey(@PathVariable String key, @RequestBody ConfigObjDTO entity) {
     String tenantId = TenantContext.getCurrentTenant();
+    if(entity == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Improperly formatted input");
+    }
     if(entity.getKey() != null && !entity.getKey().equals(key)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Key in request body must match path");
     }
@@ -60,7 +67,22 @@ public class ConfigObjController {
     Optional<ConfigObj> result = repo.findById(configObjId);
     if(result.isPresent()) {
       ConfigObj oldEntity = result.get();
-      oldEntity.setValue(entity.getValue());
+      //Don't allow an empty token or empty password in dbinfo or sqconfig respectively to overwrite an existing value
+      if(key.equals("dbinfo") || key.equals("sqconfig")) {
+        JSONObject valueJson = entity.getValue();
+        JSONObject oldValueJson = oldEntity.getValue();
+        
+        String secretKey = "";
+        if(key.equals("dbinfo")) { secretKey = "pass"; }
+        if(key.equals("sqconfig")) { secretKey = "token"; }
+        if( (valueJson.get(secretKey) == null) || ((String)valueJson.get(secretKey)).equals("")) {
+          //Use the old stored secretKey
+          valueJson.put(secretKey, (String)oldValueJson.get(secretKey));
+        }
+        oldEntity.setValue(valueJson);
+      } else { 
+        oldEntity.setValue(entity.getValue());
+      }
       oldEntity.setTenant(tenantId);
       repo.save(oldEntity);
       returnEntity = oldEntity;
@@ -77,11 +99,39 @@ public class ConfigObjController {
   }
 
   private Map<String, Object> configObjToMap(ConfigObj config) {
-    HashMap<String, Object> json = new HashMap<>();
-    json.put("tenant", config.getTenant());
-    json.put("key", config.getKey());
-    json.put("value", config.getValue().toString());
-    return json;
+    HashMap<String, Object> jsonMap = new HashMap<>();
+    if(config != null) {
+      jsonMap.put("tenant", config.getTenant());
+      jsonMap.put("key", config.getKey());
+      jsonMap.put("value", config.getValue().toString());
+    }
+    return jsonMap;
+  }
+
+  private void sanitizeMap(Map<String, Object> map) {
+    if( map == null) {
+      return;
+    }
+    if(map.containsKey("key") && map.get("key").equals("dbinfo")) {
+      String jsonValue = (String)map.get("value");
+      try {
+        JSONObject json = (JSONObject)JSONValue.parseWithException(jsonValue);
+        json.put("pass", "");
+        map.put("value", json.toJSONString());
+      } catch(Exception e) {
+        System.out.println("Unable to sanitize dbinfo: " + e.getLocalizedMessage());
+      }
+    }
+    if(map.containsKey("key") && map.get("key").equals("sqconfig")) {
+      String jsonValue = (String)map.get("value");
+      try {
+        JSONObject json = (JSONObject)JSONValue.parseWithException(jsonValue);
+        json.put("token", "");
+        map.put("value", json.toJSONString());
+      } catch(Exception e) {
+        System.out.println("Unable to sanitize sqconfig: " + e.getLocalizedMessage());
+      }
+    }
   }
   
 }
