@@ -141,6 +141,43 @@ public class ConfigObjControllerTest {
   }
 
   @Test
+  public void setAndRetrieveMVCSQConfig() throws Exception {
+    JSONObject sqconfig = new JSONObject();
+    String token = "goodtoken";
+    String key = "sqconfig";
+    sqconfig.put("token", token);
+    JSONObject json = new JSONObject();
+    json.put("key", key);
+    json.put("value", sqconfig);
+
+    mvc.perform(put(QUERY_PATH + "/" + key)
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
+      .content(json.toString()))
+        .andExpect(status().isOk());
+
+    MvcResult mvcResult = mvc.perform(get(QUERY_PATH + "/" + key)
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku"))
+        .andExpect(status().isOk())
+        .andReturn();
+    
+    String content = mvcResult.getResponse().getContentAsString();
+    System.out.println("Got content from request: " + content);
+    JSONObject resultJson = (JSONObject) JSONValue.parse(content);
+    JSONObject valueJson = (JSONObject) JSONValue.parse((String)resultJson.get("value"));
+    assertEquals("", (String)valueJson.get("token"));
+
+    //Make sure we've got the right value in the repo
+    ConfigObjId configObjId = new ConfigObjId();
+    configObjId.setTenant("diku");
+    configObjId.setKey(key);
+    ConfigObj sqConfigConfig = repo.findById(configObjId).get();
+    assertEquals(sqConfigConfig.getValue().get("token"), token);
+
+  }
+
+  @Test
   public void setAndOverwriteMVC() throws Exception {
     JSONObject dbconf = new JSONObject();
     dbconf.put("url", postgreSQLContainer.getJdbcUrl());
