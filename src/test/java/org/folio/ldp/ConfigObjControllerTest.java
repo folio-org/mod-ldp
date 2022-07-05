@@ -339,6 +339,7 @@ public class ConfigObjControllerTest {
     String key = "sqconfig";
     
     json.put("token", "goodtoken");
+    json.put("foo","bar");
     configObj.setTenant("diku");
     configObj.setKey(key);
     configObj.setValue(json);
@@ -347,6 +348,7 @@ public class ConfigObjControllerTest {
     JSONObject putJson = new JSONObject();
     JSONObject newSQConfig = new JSONObject();
     newSQConfig.put("token", "");
+    newSQConfig.put("foo","bar");
     putJson.put("key", key);
     putJson.put("value", newSQConfig);
 
@@ -361,6 +363,43 @@ public class ConfigObjControllerTest {
     configObjId.setKey(key);
     ConfigObj sqConfigConfig = repo.findById(configObjId).get();
     assertEquals(sqConfigConfig.getValue().get("token"), "goodtoken");
+
+
+  }
+
+  @Test
+  public void testOverwriteSqConfigWithToken() throws Exception {
+    ConfigObj configObj = new ConfigObj();
+    JSONObject json = new JSONObject();
+    String key = "sqconfig";
+    
+    json.put("token", "goodtoken");
+    
+    configObj.setTenant("diku");
+    configObj.setKey(key);
+    configObj.setValue(json);
+    repo.save(configObj);
+    
+    JSONObject putJson = new JSONObject();
+    JSONObject newSqConfig = new JSONObject();
+    String newToken = "royale_with_cheese";
+    
+    newSqConfig.put("token", newToken);
+
+    putJson.put("key", key);
+    putJson.put("value", newSqConfig);
+
+    mvc.perform(put(QUERY_PATH + "/" + key)
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
+      .content(putJson.toJSONString()))
+        .andExpect(status().isOk());
+    
+    ConfigObjId configObjId = new ConfigObjId();
+    configObjId.setTenant("diku");
+    configObjId.setKey(key);
+    ConfigObj sqConfigConfig = repo.findById(configObjId).get();
+    assertEquals(sqConfigConfig.getValue().get("token"), newToken);
 
 
   }
