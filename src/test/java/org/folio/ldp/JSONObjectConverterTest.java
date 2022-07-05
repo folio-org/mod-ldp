@@ -3,7 +3,7 @@ package org.folio.ldp;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class JSONObjectConverterTest {
     JSONObjectConverter converter = new JSONObjectConverter();
     String jsonString = "{ \"cow\" : \"moo\" }";
     JSONObject json = converter.convertToEntityAttribute(jsonString);
-    assertTrue(json.getString("cow").equals("moo"));
+    assertTrue(json.get("cow").equals("moo"));
 
   }
 

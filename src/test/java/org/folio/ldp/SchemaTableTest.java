@@ -31,7 +31,7 @@ import java.util.Map;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

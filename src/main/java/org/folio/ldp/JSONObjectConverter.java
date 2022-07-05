@@ -2,8 +2,12 @@
 
 package org.folio.ldp;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+//import org.json.JSONException;
+//import org.json.JSONObject;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.ParseException;
+
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -26,9 +30,11 @@ public class JSONObjectConverter implements AttributeConverter<JSONObject, Strin
   public JSONObject convertToEntityAttribute(String string) {
     JSONObject json;
     try {
-      json = new JSONObject(string);
-    } catch(JSONException je) {
-      System.out.println("Unable to convert string " + string + " to JSONObject: " + je.getLocalizedMessage());
+      //json = new JSONObject(string);
+      Object obj = JSONValue.parseWithException(string);
+      json = (JSONObject)obj;
+    } catch(ParseException pe) {
+      System.out.println("Unable to convert string " + string + " to JSONObject: " + pe.getLocalizedMessage());
       json = null;
     }
     return json;
