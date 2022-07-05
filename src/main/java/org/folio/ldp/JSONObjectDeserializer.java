@@ -23,11 +23,21 @@ public class JSONObjectDeserializer extends JsonDeserializer<JSONObject> {
       throw new IOException(e);
     }
     System.out.println("Attempting to deserialize JSON: " + input);
+    Object obj;
     try {
-      Object obj = JSONValue.parseWithException(input);
+      obj = JSONValue.parseWithException(input);
       json = (JSONObject) obj;
-    } catch(ParseException pe) {
-      throw new IOException(pe);
+    } catch(Exception pe) {
+      try {
+        System.out.println("Error parsing initial JSON: " + pe.getLocalizedMessage() );
+        input = input.replaceAll("^\"|\"$", "");
+        input = JSONUtil.unescape(input);
+        System.out.println("Attempting to re-parse escaped JSON: " + input);
+        obj = JSONValue.parseWithException(input);
+        json = (JSONObject) obj;
+      } catch(Exception e) {
+        throw new IOException(e);
+      }      
     }
     return json;
   }

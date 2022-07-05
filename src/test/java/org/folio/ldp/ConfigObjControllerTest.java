@@ -220,6 +220,36 @@ public class ConfigObjControllerTest {
         .andExpect(status().is(400));
   }
 
+  
+  @Test
+  public void putEscapedValue() throws Exception {
+    JSONObject valueJson = new JSONObject();
+    valueJson.put("name","doofensmirch");
+    valueJson.put("role","villain");
+    JSONObject json = new JSONObject();
+    json.put("key", "npc");
+    json.put("value", valueJson.toJSONString());
+
+    mvc.perform(put(QUERY_PATH + "/" + "npc")
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
+      .content(json.toString()))
+        .andExpect(status().isOk());
+
+    MvcResult mvcResult = mvc.perform(get(QUERY_PATH + "/" + "npc")
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku"))
+        .andExpect(status().isOk())
+        .andReturn();
+      
+      String content = mvcResult.getResponse().getContentAsString();
+      System.out.println("Got content from request: " + content);
+      JSONObject resultJson = (JSONObject) JSONValue.parse(content);
+      JSONObject getValueJson = (JSONObject) JSONValue.parse((String)resultJson.get("value"));
+      assertEquals("villain", (String)getValueJson.get("role"));
+  } 
+ 
+
   @Test
   public void putBadJson() throws Exception {
     mvc.perform(put(QUERY_PATH + "/" + "stupid")
@@ -442,8 +472,6 @@ public class ConfigObjControllerTest {
   }
 
   
-
-  //@Ignore
   @Test
   public void testPutWithBadJsonFormat() throws Exception {
    
