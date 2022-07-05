@@ -332,6 +332,41 @@ public class ConfigObjControllerTest {
 
   }
 
+  @Test
+  public void testOverwriteSqConfigWithEmptyToken() throws Exception {
+    ConfigObj configObj = new ConfigObj();
+    JSONObject json = new JSONObject();
+    String key = "sqconfig";
+    
+    json.put("token", "goodtoken");
+    configObj.setTenant("diku");
+    configObj.setKey(key);
+    configObj.setValue(json);
+    repo.save(configObj);
+    
+    JSONObject putJson = new JSONObject();
+    JSONObject newSQConfig = new JSONObject();
+    newSQConfig.put("token", "");
+    putJson.put("key", key);
+    putJson.put("value", newSQConfig);
+
+    mvc.perform(put(QUERY_PATH + "/" + key)
+      .contentType("application/json")
+      .header("X-Okapi-Tenant", "diku")
+      .content(putJson.toJSONString()))
+        .andExpect(status().isOk());
+    
+    ConfigObjId configObjId = new ConfigObjId();
+    configObjId.setTenant("diku");
+    configObjId.setKey(key);
+    ConfigObj sqConfigConfig = repo.findById(configObjId).get();
+    assertEquals(sqConfigConfig.getValue().get("token"), "goodtoken");
+
+
+  }
+
+  
+
   //@Ignore
   @Test
   public void testPutWithBadJsonFormat() throws Exception {
