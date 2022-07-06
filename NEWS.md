@@ -1,3 +1,7 @@
+## 1.0.5 2022-07-06
+* Expose config data for sqconfig keys
+* Update interface version to 1.1
+
 ## 1.0.4 2022-07-05
 * Add support for both escaped and inline JSON in config objects
 
@@ -31,4 +35,4 @@
 * Support `orderBy` in query structure. Fixes #14.
 * Add "checkstyle" linting support (disabled) to the `pom.xml`. Fixes #9. Note that there are many lint errors: the plugin is disabled until I have time to look at these and decide which to fix and which are the result of silly rules.
 * Initial release
-
+ 
