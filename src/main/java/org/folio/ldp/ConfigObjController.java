@@ -122,16 +122,6 @@ public class ConfigObjController {
         System.out.println("Unable to sanitize dbinfo: " + e.getLocalizedMessage());
       }
     }
-    if(map.containsKey("key") && map.get("key").equals("sqconfig")) {
-      String jsonValue = (String)map.get("value");
-      try {
-        JSONObject json = (JSONObject)JSONValue.parseWithException(jsonValue);
-        json.put("token", "");
-        map.put("value", json.toJSONString());
-      } catch(Exception e) {
-        System.out.println("Unable to sanitize sqconfig: " + e.getLocalizedMessage());
-      }
-    }
   }
   
 }
