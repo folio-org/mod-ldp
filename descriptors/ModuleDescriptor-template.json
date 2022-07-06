@@ -3,7 +3,7 @@
   "name" : "ldp module",
   "provides" : [ {
     "id" : "ldp-query",
-    "version" : "1.0",
+    "version" : "1.1",
       "handlers": [
         {
           "methods": [ "GET" ],

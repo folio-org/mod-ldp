@@ -166,7 +166,7 @@ public class ConfigObjControllerTest {
     System.out.println("Got content from request: " + content);
     JSONObject resultJson = (JSONObject) JSONValue.parse(content);
     JSONObject valueJson = (JSONObject) JSONValue.parse((String)resultJson.get("value"));
-    assertEquals("", (String)valueJson.get("token"));
+    assertEquals(token, (String)valueJson.get("token"));
 
     //Make sure we've got the right value in the repo
     ConfigObjId configObjId = new ConfigObjId();
