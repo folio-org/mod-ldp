@@ -33,6 +33,15 @@ public class QueryServiceImplTest {
   }
 
   @Test
+  public void generateQueryFilterOps() {
+    var ops = List.of("=", "<>", "<", "<=", ">", ">=", "LIKE", "ILIKE");
+    for (var op: ops) {
+      tq.columnFilters = List.of(new ColumnFilter("col", op, "val"));
+      assertThat(generateQuery(tq), is("SELECT * FROM schema.table WHERE (\"col\" " + op + " 'val') LIMIT 500"));
+    }
+  }
+
+  @Test
   public void generateQueryFilterWithSingleQuotes() {
     tq.columnFilters = List.of(new ColumnFilter("col", ">", "it's cool, it's \"masked\""));
     assertThat(generateQuery(tq), is(
