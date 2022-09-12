@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.folio</groupId>
   <artifactId>mod-ldp</artifactId>
-  <version>1.0.6</version>
+  <version>1.0.7-SNAPSHOT</version>
   <description>REST server for Library Data Platform</description>
 
   <licenses>
@@ -52,7 +52,7 @@
     <url>https://github.com/library-data-platform/mod-ldp</url>
     <connection>scm:git:git://github.com:library-data-platform/mod-ldp.git</connection>
     <developerConnection>scm:git:git@github.com:library-data-platform/mod-ldp.git</developerConnection>
-    <tag>v1.0.6</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <dependencies>
