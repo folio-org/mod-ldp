@@ -7,30 +7,41 @@ import com.healthmarketscience.sqlbuilder.OrderObject.Dir;
 import com.healthmarketscience.sqlbuilder.OrderObject.NullOrder;
 import com.healthmarketscience.sqlbuilder.OrderObject;
 import com.healthmarketscience.sqlbuilder.custom.mysql.MysLimitClause;
-
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class QueryServiceImpl implements QueryService {
 
-  private String quote(String s) {
-    return "\"" + s + "\"";
+  private String quote(String column) {
+    // reject embedded quote that leads to SQL injection
+    // https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS
+    if (column.contains("\"")) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: Column name must not contain quotes: " + column);
+    }
+    return "\"" + column + "\"";
   }
 
   private BinaryCondition makeCond(ColumnFilter filter) {
+    // mask single quotes to avoid SQL injection
+    // https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-STRINGS
+    // https://openhms.sourceforge.io/sqlbuilder/ "Does not do any form of SQL string escaping"
+    var val = filter.value.replace("'", "''");
+
     CustomSql key = new CustomSql(quote(filter.key));
-    if (filter.op == null) return BinaryCondition.equalTo(key, filter.value);
+    if (filter.op == null) return BinaryCondition.equalTo(key, val);
 
     switch (filter.op) {
-    case "=":     return BinaryCondition.equalTo(key, filter.value);
-    case "<>":    return BinaryCondition.notEqualTo(key, filter.value);
-    case "<":     return BinaryCondition.lessThan(key, filter.value);
-    case "<=":    return BinaryCondition.lessThanOrEq(key, filter.value);
-    case ">":     return BinaryCondition.greaterThan(key, filter.value);
-    case ">=":    return BinaryCondition.greaterThanOrEq(key, filter.value);
-    case "LIKE":  return BinaryCondition.like(key, filter.value);
-    case "ILIKE": return new BinaryCondition(" ILIKE ", key, filter.value);
-    default:      return BinaryCondition.equalTo(key, filter.value);
+    case "=":     return BinaryCondition.equalTo(key, val);
+    case "<>":    return BinaryCondition.notEqualTo(key, val);
+    case "<":     return BinaryCondition.lessThan(key, val);
+    case "<=":    return BinaryCondition.lessThanOrEq(key, val);
+    case ">":     return BinaryCondition.greaterThan(key, val);
+    case ">=":    return BinaryCondition.greaterThanOrEq(key, val);
+    case "LIKE":  return BinaryCondition.like(key, val);
+    case "ILIKE": return new BinaryCondition(" ILIKE ", key, val);
+    default:      return BinaryCondition.equalTo(key, val);
     }
   }
 
@@ -51,7 +62,7 @@ public class QueryServiceImpl implements QueryService {
     if(query.columnFilters != null) {
       for (ColumnFilter col : query.columnFilters) {
         if(col == null || col.key == null || col.key.equals("") || col.value == null || col.value.equals("") ) {
-          continue; 
+          continue;
         }
         selectQuery = selectQuery.addCondition(makeCond(col));
       }
@@ -84,7 +95,7 @@ public class QueryServiceImpl implements QueryService {
 
     return queryContent;
 
- 
+
   }
-  
+
 }
