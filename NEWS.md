@@ -1,5 +1,5 @@
 ## 1.0.6 2022-09-12
-* SQL injection in strings and column names ([MODLDP-37](https://issues.folio.org/browse/MODLDP-37))
+* Prevent SQL injection in strings and column names ([MODLDP-37](https://issues.folio.org/browse/MODLDP-37))
 
 ## 1.0.5 2022-07-06
 * Expose config data for sqconfig keys
