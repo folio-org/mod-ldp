@@ -39,7 +39,6 @@ public class TableObjController {
     return tableList; 
   }
 
-  @Cacheable(cacheNames="tableMap")
   public Map<String, Boolean> getTablesAsMap() {
     try {
       tableRepository.setJdbcTemplate(getJdbc());
