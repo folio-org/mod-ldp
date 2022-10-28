@@ -1,3 +1,6 @@
+## 1.0.7 2022-10-28
+* Update Spring Boot to 2.7.x ([MODLDP-35](https://issues.folio.org/browse/MODLDP-35))
+
 ## 1.0.6 2022-09-12
 * Prevent SQL injection in strings and column names ([MODLDP-37](https://issues.folio.org/browse/MODLDP-37))
 
