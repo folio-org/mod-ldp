@@ -21,6 +21,11 @@
 
   <properties>
     <java.version>11</java.version>
+    <!-- After upgrading to spring-boot-starter-parent >= 3.0.0 remove
+         the snakeyaml and postgresql security upgrades:
+    -->
+    <snakeyaml.version>1.33</snakeyaml.version>
+    <postgresql.version>42.5.1</postgresql.version>
   </properties>
 
   <repositories>
