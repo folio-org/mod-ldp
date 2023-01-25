@@ -1,0 +1,123 @@
+openapi: 3.0.0
+info:
+    title: mod-ldp OpenAPI Specification 
+    version: 0.0.1
+paths:
+    /ldp/config:
+        parameters:
+            - $ref: headers/okapi-tenant.yaml
+            - $ref: headers/okapi-token.yaml
+            - $ref: headers/okapi-url.yaml
+        get:
+            description: Get config entries
+            operationId: getConfig
+            responses:
+                "200":
+                    description: Configurations returned
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/configs"
+                "400":
+                    $ref: "#/components/responses/trait_400"
+                "500":
+                    $ref: "#/components/responses/trait_500"
+    /ldp/config/{key}:
+        parameters:
+            - $ref: headers/okapi-tenant.yaml
+            - $ref: headers/okapi-token.yaml
+            - $ref: headers/okapi-url.yaml
+            - in: path
+              name: key
+              required: true
+              description: configuration key
+              schema:
+                  type: string
+        get:
+            operationId: getConfigEntry
+            description: Get Configuration Entry
+            reponses:
+                "200":
+                    description: Configuration Entry Returned
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/configuration.json"
+                "400":
+                    - $ref: "#/components/responses/trait_400"
+                "404":
+                    - $ref: "#/components/responses/trait_404"
+                "500":
+                    - $ref: "#/components/responses/trait_500"
+        put:
+            operationId: putConfigEntry
+            description: Create or Modify a configuration entry
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/configuration.json"
+            responses:
+                "200":
+                    description: Entry created or modified
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/configuration.json"
+                "400":
+                     $ref: "#/components/responses/trait_400"
+                "500":
+                     $ref: "#/components/responses/trait_500"
+
+    /db/tables:
+        get:
+            operationId: getTables
+            description: Return a list of all tables in all schemas
+            responses:
+                "200":
+                   description: Table data returned
+                   content:
+                       application/json:
+                           schema:
+                               $ref: "#/components/schemas/tables.json"
+
+    /db/columns:
+        parameters:
+            - in: query
+              name: schema
+              required: true
+              description: the schema to use
+            - in: query
+              name: table
+              required: true
+              description: which table to use
+
+        get:
+            operationId: getColumns
+            description: Return of a list of all columns in a given table
+            responses:
+                "200":
+                    description: Columns returned
+                    content:
+                        application/json:
+                            schema:
+                                $ref: columns-schema.json
+            
+    /query:
+        post:
+            operationId: postQuery
+            description: Query the LDP service
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: query-schema.json
+                required: true
+            responses:
+                "200":
+                    description: Query returned
+                    content:
+                        application/json:
+                            schema:
+                                $ref: results-schema.json
+
+
