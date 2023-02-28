@@ -1,3 +1,6 @@
+## 1.0.8 2022-02-24
+* Upgrade snakeyaml and postgresql dependencies ([MODLDP-44](https://issues.folio.org/browse/MODLDP-44))
+
 ## 1.0.7 2022-10-28
 * Update Spring Boot to 2.7.x ([MODLDP-35](https://issues.folio.org/browse/MODLDP-35))
 
