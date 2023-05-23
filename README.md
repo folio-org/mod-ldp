@@ -1,6 +1,6 @@
 # mod-ldp
 
-Copyright (C) 2020-2021 The Open Library Foundation
+Copyright (C) 2020-2023 The Open Library Foundation
 
 This software is distributed under the terms of the Apache License,
 Version 2.0. See the file "[LICENSE](LICENSE)" for more information.
@@ -109,7 +109,8 @@ Refer to the Wiki [FOLIO Code of Conduct](https://wiki.folio.org/display/COMMUNI
 
 ### Issue tracker
 
-The project uses this GitHub [issue tracker](https://github.com/library-data-platform/mod-ldp/issues).
+See project [MODLDP](https://issues.folio.org/browse/MODLDP)
+at the [FOLIO issue tracker](https://dev.folio.org/guidelines/issue-tracker).
 
 ### Code analysis
 
