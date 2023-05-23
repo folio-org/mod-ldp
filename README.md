@@ -109,7 +109,8 @@ Refer to the Wiki [FOLIO Code of Conduct](https://wiki.folio.org/display/COMMUNI
 
 ### Issue tracker
 
-The project uses this GitHub [issue tracker](https://github.com/library-data-platform/mod-ldp/issues).
+See project [MODLDP](https://issues.folio.org/browse/MODLDP)
+at the [FOLIO issue tracker](https://dev.folio.org/guidelines/issue-tracker).
 
 ### Code analysis
 
