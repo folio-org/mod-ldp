@@ -1,4 +1,4 @@
-INSERT INTO public.user_users VALUES ('00bc2807-4d5b-4a27-a2b5-b7b1ba431cc4',false,'133143370961512','2021-06-29 21:51:45.424-04','2015-04-12 20:00:00-04','2019-06-19 20:00:00-04','503a81cd-6c26-400f-b620-14c08943697c','patron','2021-06-29 21:51:45.424-04','sallie','{
+INSERT INTO public.user_users VALUES ('00bc2807-4d5b-4a27-a2b5-b7b1ba431cc4',false,'133143370961512','2021-06-29 21:51:45.424','2015-04-12 20:00:00-04','2019-06-19 20:00:00-04','503a81cd-6c26-400f-b620-14c08943697c','patron','2021-06-29 21:51:45.424-04','sallie','{
     "id": "00bc2807-4d5b-4a27-a2b5-b7b1ba431cc4",
     "active": false,
     "barcode": "133143370961512",
@@ -38,7 +38,7 @@ INSERT INTO public.user_users VALUES ('00bc2807-4d5b-4a27-a2b5-b7b1ba431cc4',fal
     "username": "sallie"
 }');
 
-INSERT INTO public.user_users VALUES ('011dc219-6b7f-4d93-ae7f-f512ed651493',false,'897083256223023','2021-06-29 21:51:46.182-04','2018-05-05 20:00:00-04','2019-09-01 20:00:00-04','3684a786-6671-4268-8ed0-9db82ebca60b','patron','2021-06-29 21:51:46.182-04','elmer','{
+INSERT INTO public.user_users VALUES ('011dc219-6b7f-4d93-ae7f-f512ed651493',false,'897083256223023','2021-06-27 21:51:46.182','2018-05-05 20:00:00-04','2019-09-01 20:00:00-04','3684a786-6671-4268-8ed0-9db82ebca60b','patron','2021-06-29 21:51:46.182-04','elmer','{
     "id": "011dc219-6b7f-4d93-ae7f-f512ed651493",
     "active": false,
     "barcode": "897083256223023",
@@ -76,7 +76,7 @@ INSERT INTO public.user_users VALUES ('011dc219-6b7f-4d93-ae7f-f512ed651493',fal
     "username": "elmer"
 }');
 
-INSERT INTO public.user_users VALUES('01b9d72b-9aab-4efd-97a4-d03c1667bf0d',false,'908122635201927','2021-06-29 21:51:45.342-04','2017-04-26 20:00:00-04','2019-05-08 20:00:00-04','ad0bc554-d5bc-463c-85d1-5562127ae91b','patron','2021-06-29 21:51:45.342-04','rick1','{
+INSERT INTO public.user_users VALUES('01b9d72b-9aab-4efd-97a4-d03c1667bf0d',false,'908122635201927','2021-06-25 21:51:45.342','2017-04-26 20:00:00-04','2019-05-08 20:00:00-04','ad0bc554-d5bc-463c-85d1-5562127ae91b','patron','2021-06-29 21:51:45.342-04','rick1','{
     "id": "01b9d72b-9aab-4efd-97a4-d03c1667bf0d",
     "active": false,
     "barcode": "908122635201927",
