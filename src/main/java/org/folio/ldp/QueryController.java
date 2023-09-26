@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,13 +28,13 @@ import org.springframework.web.server.ResponseStatusException;
 public class QueryController {
 
   private JdbcTemplate jdbc;
-  
+
   @Autowired
   private TableObjController tableController;
-  
-  @Autowired 
+
+  @Autowired
   private QueryService queryService;
-  
+
   @Autowired
   private DBInfoService dbInfoService;
 
@@ -52,33 +51,33 @@ public class QueryController {
     dmds.setDriverClassName("org.postgresql.Driver");
 
     jdbc = new JdbcTemplate(dmds);
-    
-    TableQuery query = queryObj.tables.get(0);
 
-    if(query == null) {
+    TableQuery tableQuery = queryObj.tables.get(0);
+
+    if(tableQuery == null) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: Parameter `tables` is required");
     }
 
     ArrayList<String> schemaWhitelist = new ArrayList<String>(Arrays.asList("public", "local", "folio_reporting"));
-    if(!schemaWhitelist.contains(query.schema)) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: Parameter `schema` value '" + query.schema +
+    if(!schemaWhitelist.contains(tableQuery.schema)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: Parameter `schema` value '" + tableQuery.schema +
         "' not found in whitelist: "+ schemaWhitelist);
     }
 
-    if(query.tableName.equals("")) {
+    if(tableQuery.tableName.equals("")) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: Parameter `tableName` is required");
     }
 
-    if(query.tableName.length() > 100) {
+    if(tableQuery.tableName.length() > 100) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: Parameter `tableName` is too long");
     }
 
     // Validate table name as whitelisted
     Map<String, Boolean> tables = tableController.getTablesAsMap();
-    Boolean isValidTableName = tables.get(query.tableName);
+    Boolean isValidTableName = tables.get(tableQuery.tableName);
     if(isValidTableName == null) {
       String validTables = String.join(",", tables.keySet());
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error for parameter `tableName`: `"+ query.tableName + "` is not a valid table name, valid table names are " + validTables  );
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error for parameter `tableName`: `"+ tableQuery.tableName + "` is not a valid table name, valid table names are " + validTables  );
     }
 
     // TODO: switch to this validation
@@ -90,7 +89,7 @@ public class QueryController {
     // Map<String, String> availableColumns = columnController.getColumnsForTableAsMap(query.schema, query.tableName);
     // System.out.println(availableColumns);
 
-    String queryContent = queryService.generateQuery(query);
+    String queryContent = queryService.generateQuery(tableQuery);
 
     List<Map<String, Object>> content;
     try {
