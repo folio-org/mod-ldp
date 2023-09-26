@@ -3,7 +3,6 @@ package org.folio.ldp;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 public interface TemplateQueryService {
