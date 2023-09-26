@@ -89,4 +89,18 @@ documentation:
               application/json:
                 type: !include results-schema.json
                 example: !include examples/results-example.json
+    /reports:
+      description: "Run a parameterized report against the LDP server"
+      post:
+        body:
+          application/json:
+            type: !include template-query-schema.json
+            example: !include examples/template-query-example.json
+        responses:
+          200:
+            body:
+              application/json:
+                type: !include template-results-schema.json
+                example: !include examples/template-results-example.json
+
 

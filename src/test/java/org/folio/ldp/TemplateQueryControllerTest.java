@@ -31,6 +31,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -127,7 +128,9 @@ public class TemplateQueryControllerTest {
             .header("X-Okapi-Tenant", "diku")
             .content(jsonString))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(3)));
+        .andExpect(jsonPath("$.records", hasSize(3)))
+        .andExpect(jsonPath("$.totalRecords", is(3)));
+
   }
 
   @Test

@@ -63,7 +63,7 @@ public class TemplateQueryServiceImpl implements TemplateQueryService {
   }
 
   @Override
-  public List<Map<String, Object>> executeSQLTemplateFunction(String functionName,
+  public Map<String, Object> executeSQLTemplateFunction(String functionName,
       Map<String, String> parameters, JdbcTemplate jdbcTemplate) {
     String functionCall = buildSQLFunctionCall(functionName, parameters);
     String sql = "SELECT * FROM " + functionCall + ";";
@@ -93,8 +93,10 @@ public class TemplateQueryServiceImpl implements TemplateQueryService {
         return rows;
       }
     });
-
-    return content;
+    Map<String, Object> value = new HashMap<>();
+    value.put("records", content);
+    value.put("totalRecords", content != null ? content.size() : 0);
+    return value;
   }
 
   protected String buildSQLFunctionCall(String functionName, Map<String, String> parameters) {
