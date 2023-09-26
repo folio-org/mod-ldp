@@ -1,6 +1,5 @@
 package org.folio.ldp;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,24 +54,14 @@ public class TemplateQueryController {
 
     //We need to use a transaction manager to rollback our queries after using them
     final DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dmds);
-    //TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
-    //transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-    //TransactionStatus transactionStatus = transactionManager.getTransaction(transactionTemplate);
-    //transactionStatus.setRollbackOnly();
 
     TransactionStatus transactionStatus
         = transactionManager.getTransaction(new DefaultTransactionDefinition());
     transactionStatus.setRollbackOnly();
     try {
-      //Map<String, String> sqlFunctionParameters = new HashMap<>();
       String templateSQL = templateQueryService.fetchRemoteSQL(templateQueryObj.url);
       String functionName = templateQueryService.getSQLFunctionName(templateSQL);
       templateQueryService.initializeSQLTemplateFunction(templateSQL, jdbc);
-      /*
-      for (TemplateParam param : templateQueryObj.params) {
-        sqlFunctionParameters.put(param.key, param.value);
-      }
-      */
       content = templateQueryService.executeSQLTemplateFunction(functionName, templateQueryObj.params,
          jdbc);
     } catch(Exception e) {

@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -98,8 +99,14 @@ public class TemplateQueryControllerTest {
     params.put("start-date", "2020-12-03");
     params.put("username", "Big Howie");
     assertEquals("count_loans_and_renewals", functionName);
-    //String functionCall = templateQueryService.buildSQLFunctionCall(functionName, params);
 
+  }
+
+  @Test
+  public void testBadFunctionName() throws Exception {
+    String badSql = "badsql";
+    String functionName = templateQueryService.getSQLFunctionName(badSql);
+    assertNull(functionName);
   }
 
 

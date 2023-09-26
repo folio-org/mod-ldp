@@ -47,12 +47,18 @@ public class TemplateQueryServiceImpl implements TemplateQueryService {
     String patternString = "--.+:function\\s+(.+)";
     Pattern pattern = Pattern.compile(patternString);
     Scanner scanner = new Scanner(sql);
+    try {
     while(scanner.hasNextLine()) {
       String line = scanner.nextLine();
       Matcher matcher = pattern.matcher(line);
-      if(matcher.find()) {
+      if (matcher.find()) {
         return matcher.group(1);
       }
+    }
+    } catch (Exception e) {
+      System.out.println("Error getting function name from sql: " + e.getLocalizedMessage());
+    } finally {
+      scanner.close();
     }
     return null;
   }
@@ -62,9 +68,11 @@ public class TemplateQueryServiceImpl implements TemplateQueryService {
       Map<String, String> parameters, JdbcTemplate jdbcTemplate) {
     String functionCall = buildSQLFunctionCall(functionName, parameters);
     String sql = "SELECT * FROM " + functionCall + ";";
+    System.out.println("Using sql: " + sql);
     List<Map<String, Object>> content;
 
-    content = jdbcTemplate.query(sql, new ResultSetExtractor<List<Map<String,Object>>>() {
+    content = jdbcTemplate.query(sql,
+        new ResultSetExtractor<List<Map<String,Object>>>() {
       public List<Map<String,Object>> extractData(ResultSet rs) throws SQLException {
         List<Map<String, Object>> rows = new ArrayList<>();
         ResultSetMetaData rsmd = rs.getMetaData();
