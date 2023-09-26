@@ -95,7 +95,7 @@ public class TemplateQueryServiceImpl implements TemplateQueryService {
     });
     Map<String, Object> value = new HashMap<>();
     value.put("records", content);
-    value.put("totalRecords", content.size());
+    value.put("totalRecords", content != null ? content.size() : 0);
     return value;
   }
 
