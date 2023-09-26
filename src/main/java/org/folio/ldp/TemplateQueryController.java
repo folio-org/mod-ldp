@@ -33,9 +33,9 @@ public class TemplateQueryController {
   private JdbcTemplate jdbc;
 
   @PostMapping
-  public List<Map<String, Object>> postTemplateQuery(@RequestBody TemplateQueryObj templateQueryObj,
+  public Map<String, Object> postTemplateQuery(@RequestBody TemplateQueryObj templateQueryObj,
       HttpServletResponse response) {
-    List<Map<String, Object>> content;
+    Map<String, Object> content;
     String tenantId = TenantContext.getCurrentTenant();
 
     Map<String, String> dbMap = dbInfoService.getDBInfo(tenantId);

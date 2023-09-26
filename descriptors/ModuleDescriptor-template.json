@@ -26,6 +26,11 @@
           "permissionsRequired": [ "ldp.read" ]
         },
         {
+          "methods": [ "POST" ],
+          "pathPattern" : "/ldp/db/reports",
+          "permissionsRequired": [ "ldp.read" ]
+        },
+        {
           "methods" : [ "PUT" ],
           "pathPattern" : "/ldp/config/{id}",
           "permissionsRequired" : [ "ldp.config.edit"]
@@ -90,7 +95,7 @@
         "name" : "DB_USERNAME",
         "value" : "folio_admin"
       },
-      { 
+      {
         "name" : "DB_PASSWORD",
         "value" : "folio_admin"
       },
