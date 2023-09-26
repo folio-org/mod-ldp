@@ -46,19 +46,18 @@ public class TemplateQueryServiceImpl implements TemplateQueryService {
   public String getSQLFunctionName(String sql) {
     String patternString = "--.+:function\\s+(.+)";
     Pattern pattern = Pattern.compile(patternString);
-    Scanner scanner = new Scanner(sql);
+
     try {
-    while(scanner.hasNextLine()) {
-      String line = scanner.nextLine();
-      Matcher matcher = pattern.matcher(line);
-      if (matcher.find()) {
-        return matcher.group(1);
+      Scanner scanner = new Scanner(sql);
+      while(scanner.hasNextLine()) {
+        String line = scanner.nextLine();
+        Matcher matcher = pattern.matcher(line);
+        if (matcher.find()) {
+          return matcher.group(1);
+        }
       }
-    }
     } catch (Exception e) {
       System.out.println("Error getting function name from sql: " + e.getLocalizedMessage());
-    } finally {
-      scanner.close();
     }
     return null;
   }
