@@ -134,6 +134,29 @@ public class TemplateQueryControllerTest {
   }
 
   @Test
+  public void testBasicFunctionWithLimit() throws Exception {
+    /*
+      {
+        "url": "https://gist.githubusercontent.com/kurtnordstrom/f04d44cdaf258bfc1a78de35582c51d0/raw/a2411255a7492d062439331a8798010d38168ddf/get_users.sql",
+        "params": {
+          "start_date": "2016-08-18T00:00:00.000Z",
+          "end_date": "2023-08-18T00:00:00.000Z",
+          "limit": 1
+        }
+      }
+     */
+    String jsonString = "{ \"url\": \"https://gist.githubusercontent.com/kurtnordstrom/f04d44cdaf258bfc1a78de35582c51d0/raw/e17fb5f64bbe2af3cceffb33510ab8d0b8dcdd78/get_users.sql\", \"params\": { \"start_date\": \"2016-08-18T00:00:00.000Z\", \"end_date\": \"2023-08-18T00:00:00.000Z\" }, \"limit\": 1 }";
+    mvc.perform(post(QUERY_PATH)
+            .contentType("application/json")
+            .header("X-Okapi-Tenant", "diku")
+            .content(jsonString))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.records", hasSize(1)))
+        .andExpect(jsonPath("$.totalRecords", is(1)));
+
+  }
+
+  @Test
   public void testRollback() throws Exception {
     DriverManagerDataSource dmds = new DriverManagerDataSource(externalPostgreSQLContainer.getJdbcUrl(),
         externalPostgreSQLContainer.getUsername(), externalPostgreSQLContainer.getPassword());

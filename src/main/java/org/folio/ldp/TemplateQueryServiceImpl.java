@@ -64,9 +64,10 @@ public class TemplateQueryServiceImpl implements TemplateQueryService {
 
   @Override
   public Map<String, Object> executeSQLTemplateFunction(String functionName,
-      Map<String, String> parameters, JdbcTemplate jdbcTemplate) {
+      Map<String, String> parameters, Integer limit, JdbcTemplate jdbcTemplate) {
     String functionCall = buildSQLFunctionCall(functionName, parameters);
-    String sql = "SELECT * FROM " + functionCall + ";";
+    String limitClause = limit != null ? "LIMIT " + limit.toString() : "";
+    String sql = "SELECT * FROM " + functionCall + limitClause + ";";
     System.out.println("Using sql: " + sql);
     List<Map<String, Object>> content;
 
@@ -76,7 +77,6 @@ public class TemplateQueryServiceImpl implements TemplateQueryService {
         List<Map<String, Object>> rows = new ArrayList<>();
         ResultSetMetaData rsmd = rs.getMetaData();
         int columnCount = rsmd.getColumnCount();
-
         while (rs.next()) {
           LinkedHashMap<String, Object> row = new LinkedHashMap<>();
           for (int i = 1; i <= columnCount; i++) {

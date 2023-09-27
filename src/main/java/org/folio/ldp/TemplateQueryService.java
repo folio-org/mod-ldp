@@ -11,5 +11,5 @@ public interface TemplateQueryService {
        JdbcTemplate jdbcTemplate);
   public abstract String getSQLFunctionName(String sql);
   public abstract Map<String,Object> executeSQLTemplateFunction(String functionName,
-      Map<String, String> parameters, JdbcTemplate jdbcTemplate);
+      Map<String, String> parameters, Integer limit, JdbcTemplate jdbcTemplate);
 }
