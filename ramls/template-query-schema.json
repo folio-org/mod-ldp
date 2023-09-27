@@ -15,7 +15,7 @@
       }
     },
     "limit": {
-      "type" : "integer",
+      "type" : ["integer", "string"],
       "description": "The limit on how many records will be returned in a response"
     }
   },

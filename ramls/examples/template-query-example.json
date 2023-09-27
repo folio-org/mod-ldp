@@ -3,6 +3,6 @@
   "params": {
     "start_date": "2023-08-18T00:00:00.000Z",
     "items_permanent_location_filter": "H",
-    "limit" : 20
+    "limit" : "20"
   }
 }
