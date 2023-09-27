@@ -8,5 +8,6 @@ import java.util.Map;
 public class TemplateQueryObj {
   public String url;
   public Map<String, String> params;
+  public Integer limit;
 }
 

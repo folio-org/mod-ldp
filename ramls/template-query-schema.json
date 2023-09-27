@@ -13,6 +13,10 @@
       "additionalProperties": {
         "type" : "string"
       }
+    },
+    "limit": {
+      "type" : "integer",
+      "description": "The limit on how many records will be returned in a response"
     }
   },
   "additionalProperties": false,

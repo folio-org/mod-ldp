@@ -62,7 +62,7 @@ public class TemplateQueryController {
       String functionName = templateQueryService.getSQLFunctionName(templateSQL);
       templateQueryService.initializeSQLTemplateFunction(templateSQL, jdbc);
       content = templateQueryService.executeSQLTemplateFunction(functionName, templateQueryObj.params,
-         jdbc);
+         templateQueryObj.limit, jdbc);
     } catch(Exception e) {
       e.printStackTrace();
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
