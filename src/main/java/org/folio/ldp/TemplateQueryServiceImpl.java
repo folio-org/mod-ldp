@@ -66,7 +66,7 @@ public class TemplateQueryServiceImpl implements TemplateQueryService {
   public Map<String, Object> executeSQLTemplateFunction(String functionName,
       Map<String, String> parameters, Integer limit, JdbcTemplate jdbcTemplate) {
     String functionCall = buildSQLFunctionCall(functionName, parameters);
-    String limitClause = limit != null ? "LIMIT " + limit.toString() : "";
+    String limitClause = limit != null ? " LIMIT " + limit.toString() : "";
     String sql = "SELECT * FROM " + functionCall + limitClause + ";";
     System.out.println("Using sql: " + sql);
     List<Map<String, Object>> content;

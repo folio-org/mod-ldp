@@ -29,7 +29,6 @@ public class TemplateQueryController {
   @Autowired
   private TemplateQueryService templateQueryService;
 
-  private JdbcTemplate jdbc;
 
   @PostMapping
   public Map<String, Object> postTemplateQuery(@RequestBody TemplateQueryObj templateQueryObj,
@@ -49,25 +48,35 @@ public class TemplateQueryController {
 
     dmds.setDriverClassName("org.postgresql.Driver");
 
-    jdbc = new JdbcTemplate(dmds);
+    return executePostTemplateQueryInTransaction(dmds, templateQueryObj);
+
+  }
+
+  public Map<String, Object> executePostTemplateQueryInTransaction(DriverManagerDataSource dmds,
+      TemplateQueryObj templateQueryObj) {
+    Map<String, Object> content;
 
     //We need to use a transaction manager to rollback our queries after using them
     final DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dmds);
+
+    JdbcTemplate jdbc = new JdbcTemplate(dmds);
 
     TransactionStatus transactionStatus
         = transactionManager.getTransaction(new DefaultTransactionDefinition());
     transactionStatus.setRollbackOnly();
     try {
+      String searchPathSql = "SET search_path = local, public;";
       String templateSQL = templateQueryService.fetchRemoteSQL(templateQueryObj.url);
       String functionName = templateQueryService.getSQLFunctionName(templateSQL);
+      jdbc.execute(searchPathSql);
       templateQueryService.initializeSQLTemplateFunction(templateSQL, jdbc);
       content = templateQueryService.executeSQLTemplateFunction(functionName, templateQueryObj.params,
-         templateQueryObj.limit, jdbc);
+          templateQueryObj.limit, jdbc);
     } catch(Exception e) {
       e.printStackTrace();
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
           "Error generating report " + templateQueryObj.url +
-          " : " + e.getLocalizedMessage());
+              " : " + e.getLocalizedMessage());
     } finally {
       // Always rollback
       if (!transactionStatus.isCompleted()) {
