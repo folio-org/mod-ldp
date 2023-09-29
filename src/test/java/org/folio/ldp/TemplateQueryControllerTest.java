@@ -1,6 +1,7 @@
 package org.folio.ldp;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -22,11 +23,9 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -140,9 +139,9 @@ public class TemplateQueryControllerTest {
         "url": "https://gist.githubusercontent.com/kurtnordstrom/f04d44cdaf258bfc1a78de35582c51d0/raw/a2411255a7492d062439331a8798010d38168ddf/get_users.sql",
         "params": {
           "start_date": "2016-08-18T00:00:00.000Z",
-          "end_date": "2023-08-18T00:00:00.000Z",
-          "limit": 1
-        }
+          "end_date": "2023-08-18T00:00:00.000Z"
+        },
+        "limit": 1
       }
      */
     String jsonString = "{ \"url\": \"https://gist.githubusercontent.com/kurtnordstrom/f04d44cdaf258bfc1a78de35582c51d0/raw/e17fb5f64bbe2af3cceffb33510ab8d0b8dcdd78/get_users.sql\", \"params\": { \"start_date\": \"2016-08-18T00:00:00.000Z\", \"end_date\": \"2023-08-18T00:00:00.000Z\" }, \"limit\": 1 }";
@@ -183,4 +182,6 @@ public class TemplateQueryControllerTest {
     assertEquals("133143370961512", barcode);
 
   }
+
+
 }
