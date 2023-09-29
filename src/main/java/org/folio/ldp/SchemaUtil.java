@@ -32,6 +32,19 @@ public class SchemaUtil {
     });
   }
 
+  public static List<TableObj> getTablesForMetadb(JdbcTemplate jdbc) {
+    String query = "SELECT * from metadb.base_table";
+
+    return jdbc.query(query, new RowMapper<TableObj>() {
+      public TableObj mapRow(ResultSet rs, int rowNumber) throws SQLException {
+        TableObj tableObj = new TableObj();
+        tableObj.setTableName(rs.getString("table_name"));
+        tableObj.setTableSchema(rs.getString("schema_name"));
+        return tableObj;
+      }
+    });
+  }
+
 
   public static List<ColumnObj> getColumnsByTableName(JdbcTemplate jdbc, String schemaName,
    String tableName) {
@@ -44,12 +57,27 @@ public class SchemaUtil {
          columnObj.setOrdinalPosition(rs.getString("ordinal_position"));
          columnObj.setTableName(tableName);
          columnObj.setTableSchema(schemaName);
-         
+
          return columnObj;
        }
-
      });
 
    }
-  
+
+   public static Boolean isLDP(JdbcTemplate jdbc) {
+    String magicQuery = "SELECT 1\n" +
+        "    FROM pg_class c JOIN pg_namespace n ON c.relnamespace=n.oid\n" +
+        "    WHERE n.nspname='dbsystem' AND c.relname='main';";
+    List<Boolean> resList = jdbc.query(magicQuery, new RowMapper<Boolean>() {
+      public Boolean mapRow(ResultSet rs, int rowNumber) throws SQLException {
+        Integer result = rs.getInt(1);
+        return result == 1 ? Boolean.TRUE : Boolean.FALSE;
+      }
+    });
+    if (resList.isEmpty()) {
+      return Boolean.FALSE;
+    }
+    return resList.get(0);
+   }
+
 }

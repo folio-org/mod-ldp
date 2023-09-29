@@ -44,7 +44,7 @@ public class SchemaTableTest {
     .withDatabaseName("query-integration-tests-db")
     .withUsername("sa")
     .withPassword("sa");
-  
+
   @ClassRule
   public static PostgreSQLContainer<?> externalPostgreSQLContainer = new PostgreSQLContainer<>("postgres:12-alpine")
     .withDatabaseName("external-test-db")
@@ -81,7 +81,7 @@ public class SchemaTableTest {
     config.setTenant("diku");
     config.setKey("dbinfo");
     config.setValue(dbJson);
-    
+
     configObjRepo.save(config);
   }
 
@@ -92,13 +92,15 @@ public class SchemaTableTest {
      dbMap.get("user"), dbMap.get("pass"));
     dmds.setDriverClassName("org.postgresql.Driver");
     CrawlTableObjRepository ctor = new CrawlTableObjRepository();
-    ctor.setJdbcTemplate(new JdbcTemplate(dmds));
-    List<TableObj> tableList = ctor.getAllTablesBySchema();
+    JdbcTemplate jdbc = new JdbcTemplate(dmds);
+    ctor.setJdbcTemplate(jdbc);
+    List<TableObj> tableList = ctor.getAllTablesBySchema(false);
     for(TableObj t : tableList) {
       System.out.print(t.getTableName() + ", " + t.getTableSchema());
     }
-    assertTrue(tableList.size() > 0);   
-  }  
+    assertTrue(tableList.size() > 0);
+    assertTrue(SchemaUtil.isLDP(jdbc));
+  }
 
   @Test
   public void getMVCTables() throws Exception {
@@ -119,7 +121,7 @@ public class SchemaTableTest {
     config.setTenant("diku");
     config.setKey("dbinfo");
     config.setValue(dbJson);
-    
+
     configObjRepo.save(config);
 
     mvc.perform(get(QUERY_PATH)

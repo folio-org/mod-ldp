@@ -31,12 +31,18 @@ public class ExternalTemplateQueryTest {
 
   @Test
   public void testFromFileParams() throws Exception {
-    String[] testList = { "externalDbTest.json" };
-    List<String> jsonStringList = new ArrayList<>();
+    Map<String, Integer> testMap = new HashMap<>();
 
-    for (String filename : testList) {
+    testMap.put( "externalDbTest.json", 1);
+    testMap.put( "externalMetadbTest.json", 3);
+
+
+
+    for (Map.Entry<String, Integer> entry : testMap.entrySet()) {
+      String filename = entry.getKey();
       String fileText = null;
       ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+      List<String> jsonStringList = new ArrayList<>();
       if (classLoader.getResource(filename) != null) {
         fileText =
             new Scanner(classLoader.getResourceAsStream(filename), "UTF-8")
@@ -78,7 +84,7 @@ public class ExternalTemplateQueryTest {
 
         Map<String, Object> resultMap
             = templateQueryController.executePostTemplateQueryInTransaction(dmds, templateQueryObj);
-        assertEquals(1, (Integer)(resultMap.get("totalRecords")));
+        assertEquals(entry.getValue(), (Integer)(resultMap.get("totalRecords")));
       }
     }
 
