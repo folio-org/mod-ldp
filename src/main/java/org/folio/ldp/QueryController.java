@@ -41,16 +41,27 @@ public class QueryController {
   @PostMapping
   public List<Map<String, Object>> postQuery(@RequestBody QueryObj queryObj, HttpServletResponse response) {
     String tenantId = TenantContext.getCurrentTenant();
-    Map<String, String> dbMap = dbInfoService.getDBInfo(tenantId);
+    Map<String, String> dbMap;
+
+    dbMap = dbInfoService.getDBInfo(tenantId);
+
 
     if(dbMap == null) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection information. Make sure the values are populated");
     }
 
-    DriverManagerDataSource dmds = new DriverManagerDataSource(dbMap.get("url"), dbMap.get("user"), dbMap.get("pass"));
-    dmds.setDriverClassName("org.postgresql.Driver");
+    DriverManagerDataSource dmds;
+    Boolean isMetadb;
 
-    jdbc = new JdbcTemplate(dmds);
+    try{
+      dmds = new DriverManagerDataSource(dbMap.get("url"), dbMap.get("user"), dbMap.get("pass"));
+      dmds.setDriverClassName("org.postgresql.Driver");
+      jdbc = new JdbcTemplate(dmds);
+      isMetadb = !SchemaUtil.isLDP(jdbc);
+    } catch(Exception e) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection: "
+        + e.getLocalizedMessage() );
+    }     
 
     TableQuery tableQuery = queryObj.tables.get(0);
 
@@ -59,7 +70,7 @@ public class QueryController {
     }
 
     ArrayList<String> schemaWhitelist = new ArrayList<String>(Arrays.asList("public", "local", "folio_reporting"));
-    if(!schemaWhitelist.contains(tableQuery.schema)) {
+    if(!isMetadb && !schemaWhitelist.contains(tableQuery.schema)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: Parameter `schema` value '" + tableQuery.schema +
         "' not found in whitelist: "+ schemaWhitelist);
     }

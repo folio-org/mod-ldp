@@ -13,25 +13,34 @@ public class CrawlTableObjRepository {
     this.jdbc = jdbc;
   }
 
-  public List<TableObj> getAllTablesBySchema() {
+  public List<TableObj> getAllTablesBySchema(Boolean isMetadb) {
 
-    ArrayList<String> schemaList = new ArrayList<>();
-    schemaList.add("local");
-    schemaList.add("folio_reporting");
-    schemaList.add("public");
+    if (!isMetadb) {
+      ArrayList<String> schemaList = new ArrayList<>();
+      schemaList.add("local");
+      schemaList.add("folio_reporting");
+      schemaList.add("public");
 
-    try {
-      return SchemaUtil.getTablesBySchemaName(jdbc, schemaList);
-    } catch(Exception e) {
-      System.out.println("Error getting tables: " + e.getLocalizedMessage());
-      throw e;
+      try {
+        return SchemaUtil.getTablesBySchemaName(jdbc, schemaList);
+      } catch (Exception e) {
+        System.out.println("Error getting tables: " + e.getLocalizedMessage());
+        throw e;
+      }
+    } else {
+      try {
+        return SchemaUtil.getTablesForMetadb(jdbc);
+      } catch (Exception e) {
+        System.out.println("Error getting tables: " + e.getLocalizedMessage());
+        throw e;
+      }
     }
   }
 
-  public List<TableObj> findAll() {
-    return getAllTablesBySchema();
+  public List<TableObj> findAll(Boolean isMetadb) {
+    return getAllTablesBySchema(isMetadb);
   }
 
-  
+
 
 }

@@ -1,3 +1,9 @@
+DROP SCHEMA IF EXISTS dbsystem CASCADE;
+
+CREATE SCHEMA IF NOT EXISTS dbsystem;
+
+CREATE TABLE IF NOT EXISTS dbsystem.main (x int);
+
 DROP TABLE IF EXISTS public.user_users;
 
 CREATE TABLE IF NOT EXISTS public.user_users(

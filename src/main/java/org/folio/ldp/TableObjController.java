@@ -30,26 +30,31 @@ public class TableObjController {
   public List<TableObj> getTableObjs() {
     List<TableObj> tableList;
     try {
-      tableRepository.setJdbcTemplate(getJdbc());
-      tableList = (List<TableObj>) tableRepository.getAllTablesBySchema();
+      JdbcTemplate jdbc = getJdbc();
+      Boolean isMetadb = !SchemaUtil.isLDP(jdbc);
+      tableRepository.setJdbcTemplate(jdbc);
+      tableList = (List<TableObj>) tableRepository.getAllTablesBySchema(isMetadb);
     } catch(Exception e) {
       System.out.println("Error getting connection " + e.getLocalizedMessage());
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection information. Make sure the values are populated correctly");
     }
-    return tableList; 
+    return tableList;
   }
 
   public Map<String, Boolean> getTablesAsMap() {
+    Boolean isMetadb;
     try {
-      tableRepository.setJdbcTemplate(getJdbc());
+      JdbcTemplate jdbc = getJdbc();
+      isMetadb = !SchemaUtil.isLDP(jdbc);
+      tableRepository.setJdbcTemplate(jdbc);
     } catch(Exception e) {
       System.out.println("Error getting connection " + e.getLocalizedMessage());
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection information. Make sure the values are populated");
     }
-    
+
     List<TableObj> tables;
     try {
-      tables = (List<TableObj>) tableRepository.findAll();
+      tables = (List<TableObj>) tableRepository.findAll(isMetadb);
     } catch(Exception e) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error getting tables: " + e.getLocalizedMessage());
     }
@@ -63,14 +68,14 @@ public class TableObjController {
     return tableMap;
   }
 
-  private DataSource getDatasource() throws SQLException, ResponseStatusException { 
+  private DataSource getDatasource() throws SQLException, ResponseStatusException {
     String tenantId = TenantContext.getCurrentTenant();
     Map<String, String> dbMap = dbInfoService.getDBInfo(tenantId);
 
     if(dbMap == null) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: Unable to get database connection information. Make sure the values are populated");
     }
-    
+
     DriverManagerDataSource dmds = new DriverManagerDataSource(dbMap.get("url"), dbMap.get("user"), dbMap.get("pass"));
     dmds.setDriverClassName("org.postgresql.Driver");
     return dmds;

@@ -68,7 +68,9 @@ public class TemplateQueryController {
       String searchPathSql = "SET search_path = local, public;";
       String templateSQL = templateQueryService.fetchRemoteSQL(templateQueryObj.url);
       String functionName = templateQueryService.getSQLFunctionName(templateSQL);
-      jdbc.execute(searchPathSql);
+      if(SchemaUtil.isLDP(jdbc)) {
+        jdbc.execute(searchPathSql);
+      }
       templateQueryService.initializeSQLTemplateFunction(templateSQL, jdbc);
       content = templateQueryService.executeSQLTemplateFunction(functionName, templateQueryObj.params,
           templateQueryObj.limit, jdbc);
