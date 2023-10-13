@@ -1,3 +1,6 @@
+## 1.1.1 2023-10-13
+* Update Java version to 17
+
 ## 1.1.0 2023-10-13
 * Allow module to support metadb backend database format ([MODLDP-48](https://issues.folio.org/browse/MODLDP-48))
 * Add functionality for templated report queries ([MODLDP-50](https://issues.folio.org/browse/MODLDP-50))
