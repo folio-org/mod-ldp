@@ -1,3 +1,6 @@
+## 1.1.2 2023-10-13
+* Update Dockerfile for Java 17
+
 ## 1.1.1 2023-10-13
 * Update Java version to 17
 
