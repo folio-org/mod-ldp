@@ -86,7 +86,9 @@ The main reason a typical project might choose Go over Node would be the perform
 
 ### TC acceptance
 
-We no not know how much difficulty we may run into having the updated mod-ldp accepted into the FOLIO flower releases. At worst, we may have to run through the whole TC module-approval process again. Whether or not that proves necessary, Node is one of the languages already accepted for back-end modules in FOLIO, but Go is not. We could possibly get that changed, but it would be additional work.
+We no not know how much difficulty we may run into having the updated mod-ldp accepted into the FOLIO flower releases. At worst, we may have to run through the whole TC module-approval process again, in which case we would likely run into problems with the language choice. [As of Poppy, Java 17 and Groovy 2 are the only approved languages](https://wiki.folio.org/display/TC/Poppy#Poppy-Languages.1), and this seems to have been true at least as far back as Lotus.
+
+Nevertheless, the reality is that mod-graphql, a core module, _is_ written in Node, whatever the guidelines say. So that suggests there is likely some openness to Node as back-end language -- probably more than to Go.
 
 
 ### Unity of code
