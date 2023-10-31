@@ -10,6 +10,7 @@
     * [TC acceptance](#tc-acceptance)
     * [Unity of code](#unity-of-code)
     * [Developer familiarity](#developer-familiarity)
+* [Appendix: PostgreSQL access in Node](#appendix-postgresql-access-in-node)
 
 
 
@@ -107,4 +108,15 @@ At present, Index Data have decent expertise in Node: it's Mike's and Jason's pr
 
 We have less expertise in Go: only Nassib is familiar with it, and Mike has written one program in it. On the other hand, given that MetaDB is written in Go, arguably we need to invest in getting more up to speed with it.
 
+
+## Appendix: PostgreSQL access in Node
+
+There are at least five Node modules for accessing PostgreSQL:
+* [`postgresql`](https://www.npmjs.com/package/postgresql) -- ignorable, as it has only one release from nine years ago.
+* [`node-postgres`](https://www.npmjs.com/package/node-postgres) -- probably ignorable, as its last release was three years ago. That could just indicate stability, but probably means recent versions of PostgreSQL are not supported.
+* [`postgresql-client`](https://www.npmjs.com/package/postgresql-client) -- active developed (94 releases, most recently a month ago) but only used by four other projects so maybe a little niche.
+* [`postgres`](https://www.npmjs.com/package/postgres) -- active (41 releases, the most recent three days ago) and widely used (151 dependents)
+* [`pg`](https://www.npmjs.com/package/pg) -- active (219 releases, the most recent two months ago) and very widely used (8,972 dependents)
+
+Both of the last two are worthy of attention, but the very large number of dependents of `pg` suggest that the community has voted it as very much the leader in its area. It's also the library recommended by [the _Using PostgreSQL with Node.js and node-postgres_ tutorial](https://stackabuse.com/using-postgresql-with-nodejs-and-node-postgres/).
 
