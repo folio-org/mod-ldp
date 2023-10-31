@@ -64,7 +64,7 @@ Whichever reimplementation language is chosen, we will need to consider the foll
 
 Total **20 days** of which 1.5 will be DevOps
 
-About three weeks, then.
+About four weeks, then.
 
 
 ### Work not to be done
