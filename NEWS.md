@@ -1,3 +1,7 @@
+## 1.1.3 2024-03-22
+* Update Spring Boot to 3.x branch
+* Fix failing test
+
 ## 1.1.2 2023-10-13
 * Update Dockerfile for Java 17
 
