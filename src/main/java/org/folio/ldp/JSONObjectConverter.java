@@ -9,8 +9,8 @@ import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
 @Converter
 public class JSONObjectConverter implements AttributeConverter<JSONObject, String> {
@@ -39,5 +39,5 @@ public class JSONObjectConverter implements AttributeConverter<JSONObject, Strin
     }
     return json;
   }
-  
+
 }
