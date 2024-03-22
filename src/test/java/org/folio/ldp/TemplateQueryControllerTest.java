@@ -92,7 +92,7 @@ public class TemplateQueryControllerTest {
 
   @Test
   public void testRemoteSQLRetrieval() throws Exception {
-    String url = "https://raw.githubusercontent.com/folio-org/folio-analytics/main/reports/count_loans_and_renewals/count_loans_and_renewals.sql";
+    String url = "https://raw.githubusercontent.com/folio-org/folio-analytics/de26cee264b695c59c68142707071befa7e2d003/reports/count_loans_and_renewals/count_loans_and_renewals.sql";
     String remoteSQL = templateQueryService.fetchRemoteSQL(url);
     String functionName = templateQueryService.getSQLFunctionName(remoteSQL);
     Map<String, String> params = new HashMap<>();

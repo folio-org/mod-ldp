@@ -1,14 +1,14 @@
 package org.folio.ldp;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
-public class TenantRequestInterceptor extends HandlerInterceptorAdapter {
+public class TenantRequestInterceptor implements HandlerInterceptor {
 
   static final String OKAPI_TENANT_HEADER = "X-Okapi-Tenant";
   @Override
@@ -21,7 +21,7 @@ public class TenantRequestInterceptor extends HandlerInterceptorAdapter {
     }
     System.out.println("Tenant ID is set to " + tenantID);
     TenantContext.setCurrentTenant(tenantID);
-    return true;    
+    return true;
   }
 
   @Override
@@ -29,5 +29,5 @@ public class TenantRequestInterceptor extends HandlerInterceptorAdapter {
     Object handler, ModelAndView modelAndView) throws Exception {
     TenantContext.clear();
   }
-  
+
 }
