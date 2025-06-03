@@ -6,6 +6,11 @@ This software is distributed under the terms of the Apache License,
 Version 2.0. See the file "[LICENSE](LICENSE)" for more information.
 
 
+## DEPRECATED
+
+mod-ldp has been replaced with [mod-reporting](https://github.com/folio-org/mod-reporting).
+
+
 ## Overview
 
 `mod-ldp` is a FOLIO module that mediates access to the [Library Data Platform](https://github.com/library-data-platform/ldp) (LDP). It removes the need to deal directly with a relational database by providing a simple WSAPI that can be used by UI code such as [`ui-ldp`](https://github.com/library-data-platform/ui-ldp).
